@@ -6,322 +6,188 @@
 <title>LEGO × BCVR — POC Production Framework</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black:#0a0a0c; --dark:#111116; --card:#16161d; --border:#2a2a35;
+  --lego:#FFD700; --lego-dk:#E6B800; --accent:#7B5CF0;
+  --green:#22C55E; --red:#EF4444; --muted:#6b6b80; --text:#e8e8f0; --light:#f0f0f8;
+}
+html { scroll-behavior: smooth; }
+body { background:var(--black); color:var(--text); font-family:'DM Sans',sans-serif; font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
 
-  :root {
-    --black:   #0a0a0c;
-    --dark:    #111116;
-    --card:    #16161d;
-    --border:  #2a2a35;
-    --lego:    #FFD700;
-    --lego-dk: #E6B800;
-    --accent:  #7B5CF0;
-    --green:   #22C55E;
-    --red:     #EF4444;
-    --muted:   #6b6b80;
-    --text:    #e8e8f0;
-    --light:   #f0f0f8;
-  }
+/* NAV */
+.sticky-nav {
+  position:sticky; top:0; z-index:200;
+  background:rgba(10,10,12,0.96); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 32px; display:flex; align-items:center; height:50px;
+  overflow-x:auto; scrollbar-width:none; gap:0;
+}
+.sticky-nav::-webkit-scrollbar { display:none; }
+.nav-home {
+  display:flex; align-items:center; gap:6px;
+  font-family:'DM Mono'; font-size:10px; font-weight:500;
+  text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--lego); text-decoration:none;
+  padding:6px 16px 6px 0; border-right:1px solid var(--border); margin-right:6px;
+  white-space:nowrap; flex-shrink:0; transition:opacity .15s;
+}
+.nav-home:hover { opacity:.7; }
+.nav-btn {
+  background:none; border:none; cursor:pointer;
+  font-family:'DM Mono'; font-size:10px; font-weight:500;
+  text-transform:uppercase; letter-spacing:0.07em;
+  color:var(--muted); padding:6px 13px; white-space:nowrap; flex-shrink:0;
+  border-radius:4px; transition:color .15s, background .15s;
+  position:relative;
+}
+.nav-btn::after {
+  content:''; position:absolute; bottom:5px; left:13px; right:13px;
+  height:1px; background:var(--lego); transform:scaleX(0); transition:transform .2s;
+}
+.nav-btn:hover { color:var(--light); }
+.nav-btn:hover::after, .nav-btn.active::after { transform:scaleX(1); }
+.nav-btn.active { color:var(--lego); }
 
-  html { scroll-behavior: smooth; }
+/* HERO */
+.hero { background:var(--dark); border-bottom:1px solid var(--border); padding:56px 48px 48px; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 80% 50%,rgba(123,92,240,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 15% 80%,rgba(255,215,0,.06) 0%,transparent 60%); pointer-events:none; }
+.hero-inner { max-width:960px; margin:0 auto; position:relative; }
+.logos { display:flex; align-items:center; gap:16px; margin-bottom:28px; }
+.logo-lego { background:#E3000B; color:#fff; font-family:'Bebas Neue'; font-size:20px; letter-spacing:1px; padding:5px 10px; border-radius:4px; }
+.logo-sep { color:var(--border); font-size:20px; }
+.logo-text { font-family:'Bebas Neue'; font-size:20px; letter-spacing:2px; color:var(--light); }
+.hero h1 { font-family:'Bebas Neue'; font-size:clamp(44px,6vw,72px); line-height:1; letter-spacing:2px; color:var(--light); margin-bottom:8px; }
+.hero h1 span { color:var(--lego); }
+.hero-sub { font-size:16px; color:var(--muted); font-weight:400; margin-bottom:28px; }
+.hero-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; }
+.tag { font-family:'DM Mono'; font-size:11px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; padding:5px 12px; border-radius:3px; background:rgba(123,92,240,.12); border:1px solid rgba(123,92,240,.3); color:#a89cf5; }
+.tag.gold { background:rgba(255,215,0,.08); border-color:rgba(255,215,0,.3); color:var(--lego-dk); }
 
-  body {
-    background: var(--black);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
+/* Hero nav grid */
+.hero-nav { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px; }
+.hero-nav-btn {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.04); border:1px solid var(--border);
+  border-radius:6px; padding:10px 14px; text-decoration:none;
+  transition:border-color .2s, background .2s, transform .15s; color:inherit;
+}
+.hero-nav-btn:hover { border-color:var(--lego); background:rgba(255,215,0,.05); transform:translateY(-1px); }
+.hero-nav-btn-num { font-family:'DM Mono'; font-size:10px; color:var(--lego); font-weight:500; flex-shrink:0; }
+.hero-nav-btn-label { font-size:12px; font-weight:600; color:var(--light); flex:1; }
+.hero-nav-btn-arrow { font-size:11px; color:var(--muted); }
 
-  /* ── HEADER ── */
-  .hero {
-    background: var(--dark);
-    border-bottom: 1px solid var(--border);
-    padding: 56px 48px 48px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse 70% 60% at 80% 50%, rgba(123,92,240,0.12) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 50% at 15% 80%, rgba(255,215,0,0.06) 0%, transparent 60%);
-    pointer-events: none;
-  }
+/* CONTENT */
+.page { max-width:960px; margin:0 auto; padding:48px; }
+.section { margin-bottom:56px; scroll-margin-top:66px; }
+.section-label { font-family:'DM Mono'; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.12em; color:var(--accent); margin-bottom:10px; }
+.section-title { font-family:'Bebas Neue'; font-size:34px; letter-spacing:1.5px; color:var(--light); margin-bottom:20px; }
 
-  .hero-inner { max-width: 960px; margin: 0 auto; position: relative; }
+.goal-box { background:linear-gradient(135deg,rgba(255,215,0,.07) 0%,rgba(123,92,240,.07) 100%); border:1px solid var(--border); border-left:3px solid var(--lego); border-radius:8px; padding:24px 28px; margin-bottom:32px; }
+.goal-box p { color:#c8c8d8; font-size:15px; line-height:1.8; }
+.goal-box strong { color:var(--lego); }
 
-  .logos {
-    display: flex; align-items: center; gap: 16px;
-    margin-bottom: 28px;
-  }
-  .logo-lego {
-    background: #E3000B; color: #fff;
-    font-family: 'Bebas Neue'; font-size: 20px; letter-spacing: 1px;
-    padding: 5px 10px; border-radius: 4px;
-  }
-  .logo-sep { color: var(--border); font-size: 20px; }
-  .logo-text {
-    font-family: 'Bebas Neue'; font-size: 20px; letter-spacing: 2px; color: var(--light);
-  }
+.pipeline { display:flex; align-items:stretch; gap:0; margin:24px 0 32px; overflow-x:auto; padding-bottom:4px; }
+.pipe-step { flex:1; min-width:110px; background:var(--card); border:1px solid var(--border); padding:16px 14px; position:relative; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; }
+.pipe-step:first-child { border-radius:8px 0 0 8px; }
+.pipe-step:last-child { border-radius:0 8px 8px 0; }
+.pipe-step+.pipe-step::before { content:'▶'; position:absolute; left:-10px; top:50%; transform:translateY(-50%); color:var(--accent); font-size:10px; z-index:2; background:var(--black); padding:2px; }
+.pipe-num { width:22px; height:22px; border-radius:50%; background:var(--accent); color:#fff; font-family:'DM Mono'; font-size:11px; font-weight:500; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.pipe-icon { font-size:22px; line-height:1; }
+.pipe-title { font-size:11px; font-weight:600; color:var(--light); text-transform:uppercase; letter-spacing:.05em; }
+.pipe-desc { font-size:10px; color:var(--muted); line-height:1.4; }
 
-  .hero h1 {
-    font-family: 'Bebas Neue'; font-size: clamp(44px, 6vw, 72px);
-    line-height: 1; letter-spacing: 2px;
-    color: var(--light); margin-bottom: 8px;
-  }
-  .hero h1 span { color: var(--lego); }
-  .hero-sub {
-    font-size: 16px; color: var(--muted); font-weight: 400; margin-bottom: 28px;
-  }
+.plat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-top:8px; }
+.plat-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:18px 18px 16px; transition:border-color .2s, transform .2s; }
+.plat-card:hover { border-color:var(--accent); transform:translateY(-2px); }
+.plat-card-head { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.plat-icon { font-size:22px; line-height:1; }
+.plat-name { font-size:13px; font-weight:600; color:var(--light); }
+.plat-role { font-family:'DM Mono'; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:.08em; }
+.plat-desc { font-size:12px; color:#8888a0; line-height:1.5; }
 
-  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag {
-    font-family: 'DM Mono'; font-size: 11px; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 5px 12px; border-radius: 3px;
-    background: rgba(123,92,240,0.12); border: 1px solid rgba(123,92,240,0.3);
-    color: #a89cf5;
-  }
-  .tag.gold {
-    background: rgba(255,215,0,0.08); border-color: rgba(255,215,0,0.3);
-    color: var(--lego-dk);
-  }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; }
+.check-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px 20px 18px; }
+.check-card-title { font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.08em; color:var(--light); margin-bottom:12px; }
+.check-list { list-style:none; display:flex; flex-direction:column; gap:7px; }
+.check-list li { display:flex; align-items:flex-start; gap:8px; font-size:13px; color:#a0a0b8; line-height:1.4; }
+.check-list li::before { content:'✓'; color:var(--green); font-size:11px; margin-top:2px; flex-shrink:0; font-weight:700; }
 
-  /* ── CONTENT ── */
-  .page { max-width: 960px; margin: 0 auto; padding: 48px; }
+.timeline { margin-top:8px; }
+.tl-row { display:grid; grid-template-columns:80px 28px 1fr; align-items:start; gap:0 12px; }
+.tl-time { font-family:'DM Mono'; font-size:11px; color:var(--lego); font-weight:500; text-align:right; padding-top:14px; }
+.tl-spine { display:flex; flex-direction:column; align-items:center; padding-top:14px; }
+.tl-dot { width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid var(--black); flex-shrink:0; z-index:1; }
+.tl-dot.gold { background:var(--lego); }
+.tl-line { width:2px; flex:1; background:var(--border); min-height:40px; }
+.tl-row:last-child .tl-line { display:none; }
+.tl-content { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px 16px; margin-bottom:12px; }
+.tl-content-title { font-size:13px; font-weight:600; color:var(--light); margin-bottom:4px; }
+.tl-content-text { font-size:12px; color:var(--muted); line-height:1.5; }
+.tl-badge { display:inline-block; margin-top:6px; font-family:'DM Mono'; font-size:10px; padding:2px 8px; border-radius:3px; }
+.tl-badge.prep { background:rgba(123,92,240,.15); color:#a89cf5; }
+.tl-badge.build { background:rgba(255,215,0,.1); color:var(--lego-dk); }
+.tl-badge.live { background:rgba(34,197,94,.1); color:var(--green); }
+.tl-badge.post { background:rgba(239,68,68,.1); color:#f87171; }
 
-  /* ── SECTION TITLES ── */
-  .section { margin-bottom: 56px; }
-  .section-label {
-    font-family: 'DM Mono'; font-size: 11px; font-weight: 500;
-    text-transform: uppercase; letter-spacing: 0.12em;
-    color: var(--accent); margin-bottom: 10px;
-  }
-  .section-title {
-    font-family: 'Bebas Neue'; font-size: 34px; letter-spacing: 1.5px;
-    color: var(--light); margin-bottom: 20px;
-  }
+.budget-table { width:100%; border-collapse:collapse; margin-top:8px; }
+.budget-table thead tr { background:rgba(123,92,240,.1); border-bottom:1px solid var(--border); }
+.budget-table th { padding:10px 16px; text-align:left; font-family:'DM Mono'; font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+.budget-table tbody tr { border-bottom:1px solid var(--border); transition:background .15s; }
+.budget-table tbody tr:hover { background:rgba(255,255,255,.02); }
+.budget-table td { padding:12px 16px; font-size:13px; color:#b0b0c8; }
+.budget-table td:first-child { color:var(--light); font-weight:500; }
+.budget-table td:last-child { font-family:'DM Mono'; font-size:12px; color:var(--lego); }
+.budget-total { background:rgba(255,215,0,.06); border:1px solid rgba(255,215,0,.2); border-radius:8px; padding:16px 20px; margin-top:12px; display:flex; justify-content:space-between; align-items:center; }
+.budget-total-label { font-size:14px; font-weight:600; color:var(--light); }
+.budget-total-amount { font-family:'Bebas Neue'; font-size:28px; color:var(--lego); letter-spacing:1px; }
 
-  /* ── GOAL BOX ── */
-  .goal-box {
-    background: linear-gradient(135deg, rgba(255,215,0,0.07) 0%, rgba(123,92,240,0.07) 100%);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--lego);
-    border-radius: 8px;
-    padding: 24px 28px;
-    margin-bottom: 32px;
-  }
-  .goal-box p { color: #c8c8d8; font-size: 15px; line-height: 1.8; }
-  .goal-box strong { color: var(--lego); }
+.road-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:8px; }
+.road-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:16px 14px; }
+.road-card.active { border-color:var(--lego); background:rgba(255,215,0,.04); }
+.road-phase { font-family:'DM Mono'; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-bottom:4px; }
+.road-name { font-size:12px; font-weight:600; color:var(--light); margin-bottom:8px; }
+.road-items { list-style:none; display:flex; flex-direction:column; gap:4px; }
+.road-items li { font-size:11px; color:var(--muted); line-height:1.4; padding-left:10px; position:relative; }
+.road-items li::before { content:'·'; position:absolute; left:2px; color:var(--accent); }
+.road-card.active .road-items li::before { color:var(--lego); }
 
-  /* ── PIPELINE ── */
-  .pipeline {
-    display: flex; align-items: stretch; gap: 0;
-    margin: 24px 0 32px; overflow-x: auto; padding-bottom: 4px;
-  }
-  .pipe-step {
-    flex: 1; min-width: 110px;
-    background: var(--card); border: 1px solid var(--border);
-    padding: 16px 14px; position: relative;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    text-align: center;
-  }
-  .pipe-step:first-child { border-radius: 8px 0 0 8px; }
-  .pipe-step:last-child { border-radius: 0 8px 8px 0; }
-  .pipe-step + .pipe-step::before {
-    content: '▶';
-    position: absolute; left: -10px; top: 50%; transform: translateY(-50%);
-    color: var(--accent); font-size: 10px; z-index: 2;
-    background: var(--black); padding: 2px;
-  }
-  .pipe-num {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent); color: #fff;
-    font-family: 'DM Mono'; font-size: 11px; font-weight: 500;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .pipe-icon { font-size: 22px; line-height: 1; }
-  .pipe-title { font-size: 11px; font-weight: 600; color: var(--light); text-transform: uppercase; letter-spacing: 0.05em; }
-  .pipe-desc { font-size: 10px; color: var(--muted); line-height: 1.4; }
+.back-top { display:flex; align-items:center; justify-content:center; gap:8px; margin:40px auto 0; padding:12px 24px; background:none; border:1px solid var(--border); border-radius:6px; cursor:pointer; width:fit-content; font-family:'DM Mono'; font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); transition:border-color .2s, color .2s; text-decoration:none; }
+.back-top:hover { border-color:var(--lego); color:var(--lego); }
 
-  /* ── PLATFORM GRID ── */
-  .plat-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 14px; margin-top: 8px;
-  }
-  .plat-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 8px; padding: 18px 18px 16px;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .plat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .plat-card-head {
-    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
-  }
-  .plat-icon { font-size: 22px; line-height: 1; }
-  .plat-name { font-size: 13px; font-weight: 600; color: var(--light); }
-  .plat-role { font-family: 'DM Mono'; font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; }
-  .plat-desc { font-size: 12px; color: #8888a0; line-height: 1.5; }
+.footer { border-top:1px solid var(--border); padding:24px 48px; max-width:960px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:12px; }
+.footer strong { color:var(--text); }
+.footer-home { display:flex; align-items:center; gap:6px; font-family:'DM Mono'; font-size:10px; text-transform:uppercase; letter-spacing:.08em; color:var(--lego); text-decoration:none; transition:opacity .15s; }
+.footer-home:hover { opacity:.7; }
 
-  /* ── TWO COL ── */
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
-
-  /* ── CHECKLIST CARD ── */
-  .check-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
-    padding: 20px 20px 18px;
-  }
-  .check-card-title {
-    font-size: 12px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--light); margin-bottom: 12px;
-  }
-  .check-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-  .check-list li {
-    display: flex; align-items: flex-start; gap: 8px;
-    font-size: 13px; color: #a0a0b8; line-height: 1.4;
-  }
-  .check-list li::before {
-    content: '✓'; color: var(--green); font-size: 11px;
-    margin-top: 2px; flex-shrink: 0; font-weight: 700;
-  }
-
-  /* ── TIMELINE ── */
-  .timeline { margin-top: 8px; }
-  .tl-row {
-    display: grid; grid-template-columns: 80px 28px 1fr;
-    align-items: start; gap: 0 12px;
-    margin-bottom: 0;
-  }
-  .tl-time {
-    font-family: 'DM Mono'; font-size: 11px; color: var(--lego);
-    font-weight: 500; text-align: right; padding-top: 14px;
-  }
-  .tl-spine {
-    display: flex; flex-direction: column; align-items: center;
-    padding-top: 14px;
-  }
-  .tl-dot {
-    width: 12px; height: 12px; border-radius: 50%;
-    background: var(--accent); border: 2px solid var(--black);
-    flex-shrink: 0; z-index: 1;
-  }
-  .tl-dot.gold { background: var(--lego); }
-  .tl-line {
-    width: 2px; flex: 1; background: var(--border);
-    min-height: 40px;
-  }
-  .tl-row:last-child .tl-line { display: none; }
-  .tl-content {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 8px; padding: 14px 16px; margin-bottom: 12px;
-  }
-  .tl-content-title {
-    font-size: 13px; font-weight: 600; color: var(--light); margin-bottom: 4px;
-  }
-  .tl-content-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
-  .tl-badge {
-    display: inline-block; margin-top: 6px;
-    font-family: 'DM Mono'; font-size: 10px;
-    padding: 2px 8px; border-radius: 3px;
-  }
-  .tl-badge.prep { background: rgba(123,92,240,0.15); color: #a89cf5; }
-  .tl-badge.build { background: rgba(255,215,0,0.1); color: var(--lego-dk); }
-  .tl-badge.live { background: rgba(34,197,94,0.1); color: var(--green); }
-  .tl-badge.post { background: rgba(239,68,68,0.1); color: #f87171; }
-
-  /* ── BUDGET TABLE ── */
-  .budget-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-  .budget-table thead tr {
-    background: rgba(123,92,240,0.1);
-    border-bottom: 1px solid var(--border);
-  }
-  .budget-table th {
-    padding: 10px 16px; text-align: left;
-    font-family: 'DM Mono'; font-size: 11px; font-weight: 500;
-    text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
-  }
-  .budget-table tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-  }
-  .budget-table tbody tr:hover { background: rgba(255,255,255,0.02); }
-  .budget-table td { padding: 12px 16px; font-size: 13px; color: #b0b0c8; }
-  .budget-table td:first-child { color: var(--light); font-weight: 500; }
-  .budget-table td:last-child {
-    font-family: 'DM Mono'; font-size: 12px; color: var(--lego);
-  }
-  .budget-total {
-    background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.2);
-    border-radius: 8px; padding: 16px 20px; margin-top: 12px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .budget-total-label {
-    font-size: 14px; font-weight: 600; color: var(--light);
-  }
-  .budget-total-amount {
-    font-family: 'Bebas Neue'; font-size: 28px; color: var(--lego); letter-spacing: 1px;
-  }
-
-  /* ── ROADMAP PHASES ── */
-  .road-grid {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 8px;
-  }
-  .road-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 8px; padding: 16px 14px;
-  }
-  .road-card.active {
-    border-color: var(--lego); background: rgba(255,215,0,0.04);
-  }
-  .road-phase {
-    font-family: 'DM Mono'; font-size: 10px; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px;
-  }
-  .road-name { font-size: 12px; font-weight: 600; color: var(--light); margin-bottom: 8px; }
-  .road-items { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-  .road-items li { font-size: 11px; color: var(--muted); line-height: 1.4; padding-left: 10px; position: relative; }
-  .road-items li::before { content: '·'; position: absolute; left: 2px; color: var(--accent); }
-  .road-card.active .road-items li::before { color: var(--lego); }
-
-  /* ── DIVIDER ── */
-  .divider {
-    border: none; border-top: 1px solid var(--border);
-    margin: 48px 0;
-  }
-
-  /* ── FOOTER ── */
-  .footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 48px;
-    max-width: 960px; margin: 0 auto;
-    display: flex; justify-content: space-between; align-items: center;
-    color: var(--muted); font-size: 12px;
-  }
-  .footer strong { color: var(--text); }
-
-  @media (max-width: 700px) {
-    .hero, .page { padding: 28px 20px; }
-    .two-col, .road-grid { grid-template-columns: 1fr; }
-    .pipeline { flex-direction: column; }
-    .pipe-step { border-radius: 8px !important; min-width: unset; }
-    .pipe-step + .pipe-step::before { display: none; }
-  }
+@media (max-width:700px) {
+  .hero, .page, .footer { padding:28px 20px; }
+  .two-col, .road-grid { grid-template-columns:1fr; }
+  .hero-nav { grid-template-columns:1fr 1fr; }
+  .pipeline { flex-direction:column; }
+  .pipe-step { border-radius:8px !important; min-width:unset; }
+  .pipe-step+.pipe-step::before { display:none; }
+}
 </style>
 </head>
 <body>
 
-<!-- HERO -->
+<nav class="sticky-nav" id="top">
+  <a href="index.html" class="nav-home">⌂ Home</a>
+  <button class="nav-btn" onclick="jumpTo('s1')">01 Goal</button>
+  <button class="nav-btn" onclick="jumpTo('s2')">02 Platforms</button>
+  <button class="nav-btn" onclick="jumpTo('s3')">03 Implementation</button>
+  <button class="nav-btn" onclick="jumpTo('s4')">04 POC Workflow</button>
+  <button class="nav-btn" onclick="jumpTo('s5')">05 Timeline</button>
+  <button class="nav-btn" onclick="jumpTo('s6')">06 Budget</button>
+  <button class="nav-btn" onclick="jumpTo('s7')">07 Roadmap</button>
+</nav>
+
 <div class="hero">
   <div class="hero-inner">
     <div class="logos">
-      <span class="logo-lego">LEGO</span>
-      <span class="logo-sep">×</span>
-      <span class="logo-text">TONGAL</span>
-      <span class="logo-sep">×</span>
+      <span class="logo-lego">LEGO</span><span class="logo-sep">×</span>
+      <span class="logo-text">TONGAL</span><span class="logo-sep">×</span>
       <span class="logo-text">BCVR IMMERSIVE</span>
     </div>
     <h1>QUICK HITS<br><span>POC FRAMEWORK</span></h1>
@@ -333,391 +199,98 @@
       <span class="tag">Broadcast Ready</span>
       <span class="tag">May 2026</span>
     </div>
+    <div class="hero-nav">
+      <a class="hero-nav-btn" href="#s1"><span class="hero-nav-btn-num">01</span><span class="hero-nav-btn-label">The Goal</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#s2"><span class="hero-nav-btn-num">02</span><span class="hero-nav-btn-label">Platforms & Software</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#s3"><span class="hero-nav-btn-num">03</span><span class="hero-nav-btn-label">Implementation</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#s4"><span class="hero-nav-btn-num">04</span><span class="hero-nav-btn-label">POC Workflow</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#s5"><span class="hero-nav-btn-num">05</span><span class="hero-nav-btn-label">Timeline</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#s6"><span class="hero-nav-btn-num">06</span><span class="hero-nav-btn-label">Budget</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#s7"><span class="hero-nav-btn-num">07</span><span class="hero-nav-btn-label">Roadmap</span><span class="hero-nav-btn-arrow">↓</span></a>
+    </div>
   </div>
 </div>
 
 <div class="page">
 
-  <!-- ── 1. WHAT WE'RE MAKING ── -->
-  <div class="section">
+  <div class="section" id="s1">
     <p class="section-label">01 — The Goal</p>
     <h2 class="section-title">WHAT WE'RE MAKING</h2>
-
-    <div class="goal-box">
-      <p>Produce a <strong>2-minute Proof of Concept</strong> showing two live LEGO® minifigure sports announcers, driven by real-time motion capture, appearing over live sports footage — broadcast-style, delivered in real time. Think a live TV sports desk, but the anchors are LEGO characters, animated by real performers.</p>
-    </div>
-
+    <div class="goal-box"><p>Produce a <strong>2-minute Proof of Concept</strong> showing two live LEGO® minifigure sports announcers, driven by real-time motion capture, appearing over live sports footage — broadcast-style, delivered in real time. Think a live TV sports desk, but the anchors are LEGO characters, animated by real performers.</p></div>
     <div class="pipeline">
-      <div class="pipe-step">
-        <div class="pipe-num">1</div>
-        <div class="pipe-icon">🏃</div>
-        <div class="pipe-title">Capture</div>
-        <div class="pipe-desc">Two performers in mocap suits</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">2</div>
-        <div class="pipe-icon">🧹</div>
-        <div class="pipe-title">Process</div>
-        <div class="pipe-desc">Clean & retarget data in real time</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">3</div>
-        <div class="pipe-icon">🧱</div>
-        <div class="pipe-title">Animate</div>
-        <div class="pipe-desc">Drive LEGO characters live</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">4</div>
-        <div class="pipe-icon">🎮</div>
-        <div class="pipe-title">Render</div>
-        <div class="pipe-desc">Unreal Engine real-time output</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">5</div>
-        <div class="pipe-icon">🎬</div>
-        <div class="pipe-title">Switch</div>
-        <div class="pipe-desc">Multi-cam, overlays, graphics</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">6</div>
-        <div class="pipe-icon">📡</div>
-        <div class="pipe-title">Deliver</div>
-        <div class="pipe-desc">Broadcast + social output</div>
-      </div>
+      <div class="pipe-step"><div class="pipe-num">1</div><div class="pipe-icon">🏃</div><div class="pipe-title">Capture</div><div class="pipe-desc">Two performers in mocap suits</div></div>
+      <div class="pipe-step"><div class="pipe-num">2</div><div class="pipe-icon">🧹</div><div class="pipe-title">Process</div><div class="pipe-desc">Clean & retarget data in real time</div></div>
+      <div class="pipe-step"><div class="pipe-num">3</div><div class="pipe-icon">🧱</div><div class="pipe-title">Animate</div><div class="pipe-desc">Drive LEGO characters live</div></div>
+      <div class="pipe-step"><div class="pipe-num">4</div><div class="pipe-icon">🎮</div><div class="pipe-title">Render</div><div class="pipe-desc">Unreal Engine real-time output</div></div>
+      <div class="pipe-step"><div class="pipe-num">5</div><div class="pipe-icon">🎬</div><div class="pipe-title">Switch</div><div class="pipe-desc">Multi-cam, overlays, graphics</div></div>
+      <div class="pipe-step"><div class="pipe-num">6</div><div class="pipe-icon">📡</div><div class="pipe-title">Deliver</div><div class="pipe-desc">Broadcast + social output</div></div>
     </div>
   </div>
 
-  <!-- ── 2. PLATFORMS & SOFTWARE ── -->
-  <div class="section">
+  <div class="section" id="s2">
     <p class="section-label">02 — Technology Stack</p>
     <h2 class="section-title">PLATFORMS & SOFTWARE</h2>
-
     <div class="plat-grid">
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">🦾</div>
-          <div>
-            <div class="plat-name">Rokoko Smartsuit</div>
-            <div class="plat-role">Body Mocap</div>
-          </div>
-        </div>
-        <div class="plat-desc">Full-body inertial suit captures every movement from the performers in real time. Connects wirelessly and streams live data.</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">📡</div>
-          <div>
-            <div class="plat-name">Xsens</div>
-            <div class="plat-role">Precision Body Capture</div>
-          </div>
-        </div>
-        <div class="plat-desc">Backup / alternative inertial capture system for high-accuracy full-body tracking. Used alongside or instead of Rokoko depending on needs.</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">😶</div>
-          <div>
-            <div class="plat-name">Face Capture (Webcam/iPhone)</div>
-            <div class="plat-role">Facial Performance</div>
-          </div>
-        </div>
-        <div class="plat-desc">Captures facial expressions and lip sync in real time. Drives the LEGO face for expressiveness and character personality.</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">🎮</div>
-          <div>
-            <div class="plat-name">Unreal Engine 5</div>
-            <div class="plat-role">Core Real-Time Engine</div>
-          </div>
-        </div>
-        <div class="plat-desc">The heart of the system. Receives mocap data, renders the LEGO characters and virtual studio environment in real time, and handles compositing.</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">🔗</div>
-          <div>
-            <div class="plat-name">Live Link (UE Plugin)</div>
-            <div class="plat-role">Mocap→Engine Bridge</div>
-          </div>
-        </div>
-        <div class="plat-desc">Unreal Engine's built-in plugin that receives live data from the mocap suits and face capture, applying it to the LEGO character rigs in real time.</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">🧱</div>
-          <div>
-            <div class="plat-name">Custom LEGO Rig</div>
-            <div class="plat-role">Character Retargeting</div>
-          </div>
-        </div>
-        <div class="plat-desc">A bespoke skeleton rig that translates human proportions into LEGO minifigure proportions — preserving intent while adding LEGO charm and joint constraints.</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">🖥️</div>
-          <div>
-            <div class="plat-name">Broadcast Engine / vMix</div>
-            <div class="plat-role">Live Switching & Output</div>
-          </div>
-        </div>
-        <div class="plat-desc">Production switcher software handling multi-camera feeds, scene transitions, overlays and graphics, keying, and final output routing — the "director's desk".</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">🎞️</div>
-          <div>
-            <div class="plat-name">NDI / SDI</div>
-            <div class="plat-role">Signal Transport</div>
-          </div>
-        </div>
-        <div class="plat-desc">Industry protocols for moving video signals between systems with minimal latency. NDI works over IP networks; SDI is the broadcast standard cabling format.</div>
-      </div>
-
-      <div class="plat-card">
-        <div class="plat-card-head">
-          <div class="plat-icon">☁️</div>
-          <div>
-            <div class="plat-name">Cloud / Remote Stack</div>
-            <div class="plat-role">Remote Collaboration</div>
-          </div>
-        </div>
-        <div class="plat-desc">Enables remote participation — performers and directors in different locations. Can be run fully remotely for POC if needed.</div>
-      </div>
-
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">🦾</div><div><div class="plat-name">Rokoko Smartsuit</div><div class="plat-role">Body Mocap</div></div></div><div class="plat-desc">Full-body inertial suit captures every movement from the performers in real time. Connects wirelessly and streams live data.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">📡</div><div><div class="plat-name">Xsens</div><div class="plat-role">Precision Body Capture</div></div></div><div class="plat-desc">Backup / alternative inertial capture system for high-accuracy full-body tracking. Used alongside or instead of Rokoko.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">😶</div><div><div class="plat-name">Face Capture</div><div class="plat-role">Facial Performance</div></div></div><div class="plat-desc">Captures facial expressions and lip sync in real time via iPhone or Android. Drives the LEGO face for expressiveness.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">🎮</div><div><div class="plat-name">Unreal Engine 5</div><div class="plat-role">Core Real-Time Engine</div></div></div><div class="plat-desc">The heart of the system. Receives mocap data, renders the LEGO characters and virtual studio environment in real time.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">🔗</div><div><div class="plat-name">Live Link (UE Plugin)</div><div class="plat-role">Mocap→Engine Bridge</div></div></div><div class="plat-desc">Unreal Engine's built-in plugin that receives live data from mocap suits and face capture, applying it to LEGO rigs in real time.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">🧱</div><div><div class="plat-name">Custom LEGO Rig</div><div class="plat-role">Character Retargeting</div></div></div><div class="plat-desc">A bespoke skeleton rig that translates human proportions into LEGO minifigure proportions — preserving intent while adding LEGO charm.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">🖥️</div><div><div class="plat-name">Broadcast Engine / vMix</div><div class="plat-role">Live Switching & Output</div></div></div><div class="plat-desc">Production switcher handling multi-camera feeds, scene transitions, overlays, keying, and final output routing.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">🎞️</div><div><div class="plat-name">NDI / SDI</div><div class="plat-role">Signal Transport</div></div></div><div class="plat-desc">Industry protocols for moving video signals between systems with minimal latency. NDI over IP; SDI for broadcast cabling.</div></div>
+      <div class="plat-card"><div class="plat-card-head"><div class="plat-icon">☁️</div><div><div class="plat-name">Cloud / Remote Stack</div><div class="plat-role">Remote Collaboration</div></div></div><div class="plat-desc">Enables remote participation — performers and directors in different locations. Can be run fully remotely for POC.</div></div>
     </div>
   </div>
 
-  <!-- ── 3. IMPLEMENTATION ── -->
-  <div class="section">
+  <div class="section" id="s3">
     <p class="section-label">03 — Implementation</p>
     <h2 class="section-title">HOW IT'S BUILT</h2>
-
     <div class="two-col">
-      <div class="check-card">
-        <div class="check-card-title">🎭 Capture Setup</div>
-        <ul class="check-list">
-          <li>Two performers fitted with Rokoko/Xsens inertial suits</li>
-          <li>iPhone or webcam face capture mounted on each performer</li>
-          <li>Suits stream wirelessly to capture workstation</li>
-          <li>Live Link streams body + face data into Unreal Engine</li>
-          <li>Both announcers captured simultaneously</li>
-        </ul>
-      </div>
-
-      <div class="check-card">
-        <div class="check-card-title">🧱 LEGO Character System</div>
-        <ul class="check-list">
-          <li>Human skeleton data mapped to LEGO skeleton via custom solver</li>
-          <li>LEGO joint constraints respected (limited rotation ranges)</li>
-          <li>Stylization layer adds LEGO charm, squash & stretch</li>
-          <li>Facial expressions retargeted to LEGO head rig</li>
-          <li>Two distinct announcer character designs (sport broadcast style)</li>
-        </ul>
-      </div>
-
-      <div class="check-card">
-        <div class="check-card-title">🎮 Unreal Engine Environment</div>
-        <ul class="check-list">
-          <li>Virtual sports broadcast desk and studio built in Unreal</li>
-          <li>Photoreal stadium background composited with live sports footage</li>
-          <li>Dynamic lighting and real-time reflections</li>
-          <li>Multiple virtual camera presets (wide, medium, close-up)</li>
-          <li>Alpha/keyer output for clean compositing</li>
-        </ul>
-      </div>
-
-      <div class="check-card">
-        <div class="check-card-title">📡 Live Production & Output</div>
-        <ul class="check-list">
-          <li>Broadcast switcher with scene presets and transitions</li>
-          <li>Live graphics overlays (scores, stats, lower thirds)</li>
-          <li>Multi-camera switching with director control</li>
-          <li>Clean alpha feed output for downstream graphics</li>
-          <li>Delivered as live stream, broadcast file, and social clips</li>
-        </ul>
-      </div>
+      <div class="check-card"><div class="check-card-title">🎭 Capture Setup</div><ul class="check-list"><li>Two performers fitted with Rokoko/Xsens inertial suits</li><li>iPhone or webcam face capture mounted on each performer</li><li>Suits stream wirelessly to capture workstation</li><li>Live Link streams body + face data into Unreal Engine</li><li>Both announcers captured simultaneously</li></ul></div>
+      <div class="check-card"><div class="check-card-title">🧱 LEGO Character System</div><ul class="check-list"><li>Human skeleton data mapped to LEGO skeleton via custom solver</li><li>LEGO joint constraints respected (limited rotation ranges)</li><li>Stylization layer adds LEGO charm, squash & stretch</li><li>Facial expressions retargeted to LEGO head rig</li><li>Two distinct announcer character designs</li></ul></div>
+      <div class="check-card"><div class="check-card-title">🎮 Unreal Engine Environment</div><ul class="check-list"><li>Virtual sports broadcast desk and studio built in Unreal</li><li>Photoreal stadium background composited with live sports footage</li><li>Dynamic lighting and real-time reflections</li><li>Multiple virtual camera presets (wide, medium, close-up)</li><li>Alpha/keyer output for clean compositing</li></ul></div>
+      <div class="check-card"><div class="check-card-title">📡 Live Production & Output</div><ul class="check-list"><li>Broadcast switcher with scene presets and transitions</li><li>Live graphics overlays (scores, stats, lower thirds)</li><li>Multi-camera switching with director control</li><li>Clean alpha feed output for downstream graphics</li><li>Delivered as live stream, broadcast file, and social clips</li></ul></div>
     </div>
   </div>
 
-  <!-- ── 4. POC WORKFLOW ── -->
-  <div class="section">
+  <div class="section" id="s4">
     <p class="section-label">04 — POC Day Workflow</p>
     <h2 class="section-title">THE 2-MINUTE POC — STEP BY STEP</h2>
-
-    <div class="goal-box">
-      <p>The POC session itself runs in <strong>2 minutes end-to-end</strong>. This is what the live demonstration looks like on the day, after setup and rehearsal are complete.</p>
-    </div>
-
+    <div class="goal-box"><p>The POC session itself runs in <strong>2 minutes end-to-end</strong>. This is what the live demonstration looks like on the day, after setup and rehearsal are complete.</p></div>
     <div class="pipeline">
-      <div class="pipe-step">
-        <div class="pipe-num">0:00</div>
-        <div class="pipe-icon">🔌</div>
-        <div class="pipe-title">Connect</div>
-        <div class="pipe-desc">Talent connect & mocap start</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">0:30</div>
-        <div class="pipe-icon">⚙️</div>
-        <div class="pipe-title">Calibrate</div>
-        <div class="pipe-desc">Data calibration & avatar link</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">1:00</div>
-        <div class="pipe-icon">🎮</div>
-        <div class="pipe-title">Scene Load</div>
-        <div class="pipe-desc">Unreal scene & camera presets</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">1:30</div>
-        <div class="pipe-icon">🎬</div>
-        <div class="pipe-title">Go Live</div>
-        <div class="pipe-desc">Live switching simulation begins</div>
-      </div>
-      <div class="pipe-step">
-        <div class="pipe-num">2:00</div>
-        <div class="pipe-icon">✅</div>
-        <div class="pipe-title">Complete</div>
-        <div class="pipe-desc">Rendered output live & ready</div>
-      </div>
+      <div class="pipe-step"><div class="pipe-num">0:00</div><div class="pipe-icon">🔌</div><div class="pipe-title">Connect</div><div class="pipe-desc">Talent connect & mocap start</div></div>
+      <div class="pipe-step"><div class="pipe-num">0:30</div><div class="pipe-icon">⚙️</div><div class="pipe-title">Calibrate</div><div class="pipe-desc">Data calibration & avatar link</div></div>
+      <div class="pipe-step"><div class="pipe-num">1:00</div><div class="pipe-icon">🎮</div><div class="pipe-title">Scene Load</div><div class="pipe-desc">Unreal scene & camera presets</div></div>
+      <div class="pipe-step"><div class="pipe-num">1:30</div><div class="pipe-icon">🎬</div><div class="pipe-title">Go Live</div><div class="pipe-desc">Live switching simulation begins</div></div>
+      <div class="pipe-step"><div class="pipe-num">2:00</div><div class="pipe-icon">✅</div><div class="pipe-title">Complete</div><div class="pipe-desc">Rendered output live & ready</div></div>
     </div>
   </div>
 
-  <!-- ── 5. TIMELINE ── -->
-  <div class="section">
+  <div class="section" id="s5">
     <p class="section-label">05 — Production Timeline</p>
     <h2 class="section-title">POC BUILD TIMELINE</h2>
-
     <div class="timeline">
-
-      <div class="tl-row">
-        <div class="tl-time">Week 1–2</div>
-        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-        <div>
-          <div class="tl-content">
-            <div class="tl-content-title">R&D & Pipeline Design</div>
-            <div class="tl-content-text">Research, technology selection, and pipeline architecture. Confirm mocap hardware (Rokoko vs Xsens). Test Live Link connection into Unreal. Define LEGO rig requirements. Set up project infrastructure.</div>
-            <span class="tl-badge prep">Preparation</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-row">
-        <div class="tl-time">Week 3–4</div>
-        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-        <div>
-          <div class="tl-content">
-            <div class="tl-content-title">LEGO Character & Rig Build</div>
-            <div class="tl-content-text">Build the custom LEGO skeleton rig. Create the retargeting solver (human→LEGO proportions). Develop the stylization layer for charm and expressiveness. Build both announcer character designs in Unreal.</div>
-            <span class="tl-badge build">Build</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-row">
-        <div class="tl-time">Week 5–6</div>
-        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-        <div>
-          <div class="tl-content">
-            <div class="tl-content-title">Unreal Environment & Broadcast Setup</div>
-            <div class="tl-content-text">Build the virtual sports broadcast studio in Unreal Engine. Integrate live sports footage compositing. Set up virtual cameras, lighting, and alpha keying. Configure broadcast switcher, scene presets, graphics overlays, and live data feeds.</div>
-            <span class="tl-badge build">Build</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-row">
-        <div class="tl-time">Week 7</div>
-        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-        <div>
-          <div class="tl-content">
-            <div class="tl-content-title">Integration & Full Pipeline Test</div>
-            <div class="tl-content-text">End-to-end pipeline testing with both performers. Verify low latency from capture to output. Test multi-camera switching workflow. Identify and fix any bottlenecks. Stress test broadcast output and signal routing.</div>
-            <span class="tl-badge build">Integration</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-row">
-        <div class="tl-time">Week 8</div>
-        <div class="tl-spine"><div class="tl-dot gold"></div><div class="tl-line"></div></div>
-        <div>
-          <div class="tl-content">
-            <div class="tl-content-title">Rehearsal & POC Production Day</div>
-            <div class="tl-content-text">Full rehearsal with talent. Creative direction and performance notes. Run the 2-minute POC live. Record multiple takes. Capture broadcast output, social clips, and isolated alpha feeds.</div>
-            <span class="tl-badge live">POC Day</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-row">
-        <div class="tl-time">Week 9</div>
-        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
-        <div>
-          <div class="tl-content">
-            <div class="tl-content-title">Post, QA & Delivery</div>
-            <div class="tl-content-text">Polish and QA the POC output. Colour grade and audio mix final version. Prepare broadcast-ready deliverables. Create social format cuts. Compile technical documentation for next phase. Present to LEGO/Tongal for review.</div>
-            <span class="tl-badge post">Delivery</span>
-          </div>
-        </div>
-      </div>
-
+      <div class="tl-row"><div class="tl-time">Week 1–2</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><div class="tl-content"><div class="tl-content-title">R&D & Pipeline Design</div><div class="tl-content-text">Research, technology selection, and pipeline architecture. Confirm mocap hardware (Rokoko vs Xsens). Test Live Link connection into Unreal. Define LEGO rig requirements. Set up project infrastructure.</div><span class="tl-badge prep">Preparation</span></div></div></div>
+      <div class="tl-row"><div class="tl-time">Week 3–4</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><div class="tl-content"><div class="tl-content-title">LEGO Character & Rig Build</div><div class="tl-content-text">Build the custom LEGO skeleton rig. Create the retargeting solver (human→LEGO proportions). Develop the stylization layer for charm and expressiveness. Build both announcer character designs in Unreal.</div><span class="tl-badge build">Build</span></div></div></div>
+      <div class="tl-row"><div class="tl-time">Week 5–6</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><div class="tl-content"><div class="tl-content-title">Unreal Environment & Broadcast Setup</div><div class="tl-content-text">Build the virtual sports broadcast studio in Unreal Engine. Integrate live sports footage compositing. Set up virtual cameras, lighting, and alpha keying. Configure broadcast switcher, scene presets, graphics overlays, and live data feeds.</div><span class="tl-badge build">Build</span></div></div></div>
+      <div class="tl-row"><div class="tl-time">Week 7</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><div class="tl-content"><div class="tl-content-title">Integration & Full Pipeline Test</div><div class="tl-content-text">End-to-end pipeline testing with both performers. Verify low latency from capture to output. Test multi-camera switching workflow. Identify and fix any bottlenecks. Stress test broadcast output and signal routing.</div><span class="tl-badge build">Integration</span></div></div></div>
+      <div class="tl-row"><div class="tl-time">Week 8</div><div class="tl-spine"><div class="tl-dot gold"></div><div class="tl-line"></div></div><div><div class="tl-content"><div class="tl-content-title">Rehearsal & POC Production Day</div><div class="tl-content-text">Full rehearsal with talent. Creative direction and performance notes. Run the 2-minute POC live. Record multiple takes. Capture broadcast output, social clips, and isolated alpha feeds.</div><span class="tl-badge live">POC Day</span></div></div></div>
+      <div class="tl-row"><div class="tl-time">Week 9</div><div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div><div><div class="tl-content"><div class="tl-content-title">Post, QA & Delivery</div><div class="tl-content-text">Polish and QA the POC output. Colour grade and audio mix final version. Prepare broadcast-ready deliverables. Create social format cuts. Compile technical documentation for next phase. Present to LEGO/Tongal for review.</div><span class="tl-badge post">Delivery</span></div></div></div>
     </div>
   </div>
 
-  <!-- ── 6. BUDGET ── -->
-  <div class="section">
+  <div class="section" id="s6">
     <p class="section-label">06 — Investment</p>
     <h2 class="section-title">POC BUDGET FRAMEWORK</h2>
-
     <table class="budget-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Phase</th>
-          <th>What it covers</th>
-          <th>Estimated (USD)</th>
-        </tr>
-      </thead>
+      <thead><tr><th>#</th><th>Phase</th><th>What it covers</th><th>Estimated (USD)</th></tr></thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>R&D & Pipeline Design</td>
-          <td>Research, testing, technology selection, prototyping</td>
-          <td>$8,000 – $15,000</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Mocap System & Talent</td>
-          <td>Hardware, suits, face capture, crew, performers</td>
-          <td>$10,000 – $20,000</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Unreal Integration</td>
-          <td>Environment build, LEGO rig, broadcast workflow</td>
-          <td>$12,000 – $25,000</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Production & Rehearsal</td>
-          <td>Shoot day, technical operations, director</td>
-          <td>$8,000 – $15,000</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>Post & Delivery</td>
-          <td>Polish, QA, final output, deliverables</td>
-          <td>$5,000 – $10,000</td>
-        </tr>
+        <tr><td>1</td><td>R&D & Pipeline Design</td><td>Research, testing, technology selection, prototyping</td><td>$8,000 – $15,000</td></tr>
+        <tr><td>2</td><td>Mocap System & Talent</td><td>Hardware, suits, face capture, crew, performers</td><td>$10,000 – $20,000</td></tr>
+        <tr><td>3</td><td>Unreal Integration</td><td>Environment build, LEGO rig, broadcast workflow</td><td>$12,000 – $25,000</td></tr>
+        <tr><td>4</td><td>Production & Rehearsal</td><td>Shoot day, technical operations, director</td><td>$8,000 – $15,000</td></tr>
+        <tr><td>5</td><td>Post & Delivery</td><td>Polish, QA, final output, deliverables</td><td>$5,000 – $10,000</td></tr>
       </tbody>
     </table>
     <div class="budget-total">
@@ -726,76 +299,44 @@
     </div>
   </div>
 
-  <!-- ── 7. ROADMAP ── -->
-  <div class="section">
+  <div class="section" id="s7">
     <p class="section-label">07 — Beyond the POC</p>
     <h2 class="section-title">ROADMAP TO FULL DEPLOYMENT</h2>
-
     <div class="road-grid">
-      <div class="road-card active">
-        <div class="road-phase">Phase 1</div>
-        <div class="road-name">✅ POC</div>
-        <ul class="road-items">
-          <li>2-minute proof of concept</li>
-          <li>Virtual announcers & mocap</li>
-          <li>Unreal environment test</li>
-          <li>Live switching sim</li>
-          <li>Rendered output demo</li>
-        </ul>
-      </div>
-      <div class="road-card">
-        <div class="road-phase">Phase 2</div>
-        <div class="road-name">Refinement</div>
-        <ul class="road-items">
-          <li>Review & feedback loop</li>
-          <li>Refine visuals & performance</li>
-          <li>Optimise mocap & avatars</li>
-          <li>Enhance workflows</li>
-          <li>Feature expansion</li>
-        </ul>
-      </div>
-      <div class="road-card">
-        <div class="road-phase">Phase 3</div>
-        <div class="road-name">Integration</div>
-        <ul class="road-items">
-          <li>Full broadcast system integration</li>
-          <li>Graphics, overlays & branding</li>
-          <li>Audio, comms & intercoms</li>
-          <li>Data & automation hooks</li>
-          <li>End-to-end pipeline test</li>
-        </ul>
-      </div>
-      <div class="road-card">
-        <div class="road-phase">Phase 4</div>
-        <div class="road-name">AR Expansion</div>
-        <ul class="road-items">
-          <li>AR enhancements added</li>
-          <li>Real-time stats & visuals</li>
-          <li>Rich data visualisation</li>
-          <li>Fan experience features</li>
-          <li>Multi-platform outputs</li>
-        </ul>
-      </div>
-      <div class="road-card">
-        <div class="road-phase">Phase 5</div>
-        <div class="road-name">Live Deployment</div>
-        <ul class="road-items">
-          <li>Full live broadcast execution</li>
-          <li>Reliable, scalable workflows</li>
-          <li>On-site & remote ops</li>
-          <li>QA & support playbook</li>
-          <li>Proven repeatable system</li>
-        </ul>
-      </div>
+      <div class="road-card active"><div class="road-phase">Phase 1</div><div class="road-name">✅ POC</div><ul class="road-items"><li>2-minute proof of concept</li><li>Virtual announcers & mocap</li><li>Unreal environment test</li><li>Live switching sim</li><li>Rendered output demo</li></ul></div>
+      <div class="road-card"><div class="road-phase">Phase 2</div><div class="road-name">Refinement</div><ul class="road-items"><li>Review & feedback loop</li><li>Refine visuals & performance</li><li>Optimise mocap & avatars</li><li>Enhance workflows</li><li>Feature expansion</li></ul></div>
+      <div class="road-card"><div class="road-phase">Phase 3</div><div class="road-name">Integration</div><ul class="road-items"><li>Full broadcast system integration</li><li>Graphics, overlays & branding</li><li>Audio, comms & intercoms</li><li>Data & automation hooks</li><li>End-to-end pipeline test</li></ul></div>
+      <div class="road-card"><div class="road-phase">Phase 4</div><div class="road-name">AR Expansion</div><ul class="road-items"><li>AR enhancements added</li><li>Real-time stats & visuals</li><li>Rich data visualisation</li><li>Fan experience features</li><li>Multi-platform outputs</li></ul></div>
+      <div class="road-card"><div class="road-phase">Phase 5</div><div class="road-name">Live Deployment</div><ul class="road-items"><li>Full live broadcast execution</li><li>Reliable, scalable workflows</li><li>On-site & remote ops</li><li>QA & support playbook</li><li>Proven repeatable system</li></ul></div>
     </div>
   </div>
+
+  <a href="#top" class="back-top">↑ Back to top</a>
 
 </div>
 
 <div class="footer">
   <div><strong>LEGO × TONGAL × BCVR Immersive</strong> — Quick Hits POC Framework</div>
-  <div>Created May 2026</div>
+  <a href="index.html" class="footer-home">⌂ Home</a>
 </div>
 
+<script>
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+// Highlight active nav button based on scroll position
+const sectionIds = ['s1','s2','s3','s4','s5','s6','s7'];
+const navBtns = document.querySelectorAll('.nav-btn');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = sectionIds.indexOf(entry.target.id);
+      navBtns.forEach((btn, i) => btn.classList.toggle('active', i === idx));
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sectionIds.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+</script>
 </body>
 </html>

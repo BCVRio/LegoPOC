@@ -7,281 +7,161 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg:      #070810;
-  --surface: #0d0f1a;
-  --card:    #111525;
-  --border:  #1e2338;
-  --border2: #2a3050;
-  --accent:  #4F8EF7;
-  --accent2: #7B5CF0;
-  --gold:    #F5A623;
-  --green:   #23D18B;
-  --red:     #F75757;
-  --muted:   #5a6080;
-  --mid:     #8892b0;
-  --text:    #ccd6f6;
-  --bright:  #e6f1ff;
+  --bg:#070810; --surface:#0d0f1a; --card:#111525; --border:#1e2338; --border2:#2a3050;
+  --accent:#4F8EF7; --accent2:#7B5CF0; --gold:#F5A623; --green:#23D18B;
+  --red:#F75757; --muted:#5a6080; --mid:#8892b0; --text:#ccd6f6; --bright:#e6f1ff;
 }
-
 html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
+body { background:var(--bg); color:var(--text); font-family:'Space Grotesk',sans-serif; font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased; }
 
-/* ── NAV ── */
-.nav {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(7,8,16,0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 40px;
-  display: flex; align-items: center; gap: 32px; height: 52px;
+/* NAV */
+.sticky-nav {
+  position:sticky; top:0; z-index:200;
+  background:rgba(7,8,16,0.97); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:0 32px; display:flex; align-items:center; height:50px;
+  overflow-x:auto; scrollbar-width:none; gap:0;
 }
-.nav-brand {
-  font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 500;
-  color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase;
-  white-space: nowrap;
+.sticky-nav::-webkit-scrollbar { display:none; }
+.nav-home {
+  display:flex; align-items:center; gap:6px;
+  font-family:'JetBrains Mono'; font-size:10px; font-weight:500;
+  text-transform:uppercase; letter-spacing:0.08em;
+  color:var(--accent); text-decoration:none;
+  padding:6px 16px 6px 0; border-right:1px solid var(--border); margin-right:6px;
+  white-space:nowrap; flex-shrink:0; transition:opacity .15s;
 }
-.nav-links { display: flex; gap: 24px; flex-wrap: wrap; }
-.nav-links a {
-  font-size: 12px; font-weight: 500; color: var(--muted);
-  text-decoration: none; transition: color 0.15s;
-  white-space: nowrap;
+.nav-home:hover { opacity:.7; }
+.nav-btn {
+  background:none; border:none; cursor:pointer;
+  font-family:'JetBrains Mono'; font-size:10px; font-weight:500;
+  text-transform:uppercase; letter-spacing:0.07em;
+  color:var(--muted); padding:6px 13px; white-space:nowrap; flex-shrink:0;
+  border-radius:4px; transition:color .15s; position:relative;
 }
-.nav-links a:hover { color: var(--accent); }
+.nav-btn::after { content:''; position:absolute; bottom:5px; left:13px; right:13px; height:1px; background:var(--accent); transform:scaleX(0); transition:transform .2s; }
+.nav-btn:hover { color:var(--bright); }
+.nav-btn:hover::after, .nav-btn.active::after { transform:scaleX(1); }
+.nav-btn.active { color:var(--accent); }
 
-/* ── HERO ── */
-.hero {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 60px 40px 52px;
-  position: relative; overflow: hidden;
-}
-.hero::after {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 55% 80% at 85% 50%, rgba(79,142,247,0.08) 0%, transparent 65%),
-    radial-gradient(ellipse 35% 50% at 10% 90%, rgba(123,92,240,0.06) 0%, transparent 60%);
-  pointer-events: none;
-}
-.hero-inner { max-width: 1000px; margin: 0 auto; position: relative; }
-.hero-eyebrow {
-  font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 500;
-  color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em;
-  margin-bottom: 16px;
-}
-.hero h1 {
-  font-size: clamp(32px, 4vw, 52px); font-weight: 700;
-  color: var(--bright); line-height: 1.1; margin-bottom: 12px;
-}
-.hero h1 em { color: var(--accent); font-style: normal; }
-.hero-desc {
-  font-size: 15px; color: var(--mid); max-width: 640px; margin-bottom: 28px;
-}
-.hero-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.pill {
-  font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 500;
-  text-transform: uppercase; letter-spacing: 0.06em;
-  padding: 4px 10px; border-radius: 3px;
-}
-.pill-blue  { background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.25); color: #85b8ff; }
-.pill-purple{ background: rgba(123,92,240,0.1); border: 1px solid rgba(123,92,240,0.25); color: #b89cf5; }
-.pill-gold  { background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.25); color: var(--gold); }
-.pill-green { background: rgba(35,209,139,0.08); border: 1px solid rgba(35,209,139,0.25); color: var(--green); }
+/* HERO */
+.hero { background:var(--surface); border-bottom:1px solid var(--border); padding:60px 40px 52px; position:relative; overflow:hidden; }
+.hero::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 55% 80% at 85% 50%,rgba(79,142,247,.08) 0%,transparent 65%),radial-gradient(ellipse 35% 50% at 10% 90%,rgba(123,92,240,.06) 0%,transparent 60%); pointer-events:none; }
+.hero-inner { max-width:1000px; margin:0 auto; position:relative; }
+.hero-eyebrow { font-family:'JetBrains Mono'; font-size:11px; font-weight:500; color:var(--accent); text-transform:uppercase; letter-spacing:.1em; margin-bottom:16px; }
+.hero h1 { font-size:clamp(32px,4vw,52px); font-weight:700; color:var(--bright); line-height:1.1; margin-bottom:12px; }
+.hero h1 em { color:var(--accent); font-style:normal; }
+.hero-desc { font-size:15px; color:var(--mid); max-width:640px; margin-bottom:28px; }
+.hero-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:32px; }
+.pill { font-family:'JetBrains Mono'; font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:.06em; padding:4px 10px; border-radius:3px; }
+.pill-blue  { background:rgba(79,142,247,.1); border:1px solid rgba(79,142,247,.25); color:#85b8ff; }
+.pill-purple{ background:rgba(123,92,240,.1); border:1px solid rgba(123,92,240,.25); color:#b89cf5; }
+.pill-gold  { background:rgba(245,166,35,.08); border:1px solid rgba(245,166,35,.25); color:var(--gold); }
+.pill-green { background:rgba(35,209,139,.08); border:1px solid rgba(35,209,139,.25); color:var(--green); }
 
-/* ── CONTENT ── */
-.page { max-width: 1000px; margin: 0 auto; padding: 48px 40px; }
+/* Hero nav */
+.hero-nav { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:8px; }
+.hero-nav-btn {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,.03); border:1px solid var(--border);
+  border-radius:6px; padding:10px 14px; text-decoration:none;
+  transition:border-color .2s, background .2s, transform .15s; color:inherit;
+}
+.hero-nav-btn:hover { border-color:var(--accent); background:rgba(79,142,247,.05); transform:translateY(-1px); }
+.hero-nav-btn-num { font-family:'JetBrains Mono'; font-size:10px; color:var(--accent); font-weight:500; flex-shrink:0; }
+.hero-nav-btn-label { font-size:12px; font-weight:600; color:var(--bright); flex:1; }
+.hero-nav-btn-arrow { font-size:11px; color:var(--muted); }
 
-/* ── CHAPTER HEADER ── */
-.chapter {
-  margin-bottom: 52px;
-  padding-top: 8px;
-}
-.chapter-header {
-  display: flex; align-items: flex-start; gap: 16px;
-  margin-bottom: 24px; padding-bottom: 16px;
-  border-bottom: 1px solid var(--border);
-}
-.chapter-num {
-  font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 500;
-  color: var(--accent2); text-transform: uppercase; letter-spacing: 0.1em;
-  background: rgba(123,92,240,0.1); border: 1px solid rgba(123,92,240,0.2);
-  padding: 4px 8px; border-radius: 3px; white-space: nowrap; margin-top: 4px;
-}
-.chapter-title-block h2 {
-  font-size: 22px; font-weight: 700; color: var(--bright); line-height: 1.2;
-}
-.chapter-title-block p {
-  font-size: 13px; color: var(--mid); margin-top: 4px;
-}
+/* CONTENT */
+.page { max-width:1000px; margin:0 auto; padding:48px 40px; }
+.chapter { margin-bottom:52px; padding-top:8px; scroll-margin-top:66px; }
+.chapter-header { display:flex; align-items:flex-start; gap:16px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.chapter-num { font-family:'JetBrains Mono'; font-size:11px; font-weight:500; color:var(--accent2); text-transform:uppercase; letter-spacing:.1em; background:rgba(123,92,240,.1); border:1px solid rgba(123,92,240,.2); padding:4px 8px; border-radius:3px; white-space:nowrap; margin-top:4px; }
+.chapter-title-block h2 { font-size:22px; font-weight:700; color:var(--bright); line-height:1.2; }
+.chapter-title-block p { font-size:13px; color:var(--mid); margin-top:4px; }
 
-/* ── SDK CARD ── */
-.sdk-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 14px; margin-bottom: 24px;
-}
-.sdk-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 20px;
-  transition: border-color 0.2s, transform 0.15s;
-}
-.sdk-card:hover { border-color: var(--border2); transform: translateY(-1px); }
-.sdk-head {
-  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px;
-}
-.sdk-icon { font-size: 26px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
-.sdk-title-block { flex: 1; }
-.sdk-name { font-size: 14px; font-weight: 600; color: var(--bright); }
-.sdk-subtitle {
-  font-family: 'JetBrains Mono'; font-size: 10px; color: var(--accent);
-  text-transform: uppercase; letter-spacing: 0.07em; margin-top: 2px;
-}
-.sdk-desc { font-size: 12px; color: var(--mid); line-height: 1.6; margin-bottom: 12px; }
-.sdk-link {
-  font-family: 'JetBrains Mono'; font-size: 10px; color: var(--accent);
-  text-decoration: none; word-break: break-all;
-  display: block; padding: 6px 8px;
-  background: rgba(79,142,247,0.06); border: 1px solid rgba(79,142,247,0.15);
-  border-radius: 4px; transition: background 0.15s;
-}
-.sdk-link:hover { background: rgba(79,142,247,0.12); }
+.sdk-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-bottom:24px; }
+.sdk-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:20px; transition:border-color .2s, transform .15s; }
+.sdk-card:hover { border-color:var(--border2); transform:translateY(-1px); }
+.sdk-head { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.sdk-icon { font-size:26px; line-height:1; flex-shrink:0; margin-top:2px; }
+.sdk-name { font-size:14px; font-weight:600; color:var(--bright); }
+.sdk-subtitle { font-family:'JetBrains Mono'; font-size:10px; color:var(--accent); text-transform:uppercase; letter-spacing:.07em; margin-top:2px; }
+.sdk-desc { font-size:12px; color:var(--mid); line-height:1.6; margin-bottom:12px; }
+.sdk-link { font-family:'JetBrains Mono'; font-size:10px; color:var(--accent); text-decoration:none; word-break:break-all; display:block; padding:6px 8px; background:rgba(79,142,247,.06); border:1px solid rgba(79,142,247,.15); border-radius:4px; transition:background .15s; margin-top:4px; }
+.sdk-link:hover { background:rgba(79,142,247,.12); }
 
-/* ── CODE BLOCK ── */
-.code-block {
-  background: #080c18; border: 1px solid var(--border);
-  border-radius: 8px; padding: 18px 20px; margin: 16px 0;
-  overflow-x: auto;
-}
-.code-label {
-  font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
-  padding-bottom: 8px; border-bottom: 1px solid var(--border);
-}
-.code-block pre {
-  font-family: 'JetBrains Mono'; font-size: 12px; line-height: 1.7;
-  color: #a8b9d8; white-space: pre-wrap;
-}
-.code-block pre .kw  { color: #7B5CF0; }
-.code-block pre .fn  { color: #4F8EF7; }
-.code-block pre .str { color: #23D18B; }
-.code-block pre .cmt { color: #3d4a6a; font-style: italic; }
-.code-block pre .num { color: var(--gold); }
+.code-block { background:#080c18; border:1px solid var(--border); border-radius:8px; padding:18px 20px; margin:16px 0; overflow-x:auto; }
+.code-label { font-family:'JetBrains Mono'; font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.code-block pre { font-family:'JetBrains Mono'; font-size:12px; line-height:1.7; color:#a8b9d8; white-space:pre-wrap; }
+.code-block pre .kw { color:#7B5CF0; }
+.code-block pre .fn { color:#4F8EF7; }
+.code-block pre .str { color:#23D18B; }
+.code-block pre .cmt { color:#3d4a6a; font-style:italic; }
+.code-block pre .num { color:var(--gold); }
 
-/* ── STEP LIST ── */
-.steps { counter-reset: step; margin: 16px 0; }
-.step {
-  counter-increment: step;
-  display: grid; grid-template-columns: 36px 1fr;
-  gap: 0 14px; margin-bottom: 16px;
-}
-.step::before {
-  content: counter(step);
-  display: flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: 50%;
-  background: rgba(79,142,247,0.12); border: 1px solid rgba(79,142,247,0.3);
-  font-family: 'JetBrains Mono'; font-size: 11px; font-weight: 600;
-  color: var(--accent); margin-top: 2px; flex-shrink: 0;
-}
-.step-content { padding-top: 4px; }
-.step-title { font-size: 13px; font-weight: 600; color: var(--bright); margin-bottom: 3px; }
-.step-desc { font-size: 12px; color: var(--mid); }
+.steps { counter-reset:step; margin:16px 0; }
+.step { counter-increment:step; display:grid; grid-template-columns:36px 1fr; gap:0 14px; margin-bottom:16px; }
+.step::before { content:counter(step); display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:rgba(79,142,247,.12); border:1px solid rgba(79,142,247,.3); font-family:'JetBrains Mono'; font-size:11px; font-weight:600; color:var(--accent); margin-top:2px; flex-shrink:0; }
+.step-content { padding-top:4px; }
+.step-title { font-size:13px; font-weight:600; color:var(--bright); margin-bottom:3px; }
+.step-desc { font-size:12px; color:var(--mid); }
 
-/* ── INFO BOX ── */
-.info-box {
-  border-radius: 8px; padding: 14px 16px; margin: 16px 0;
-  font-size: 12px; line-height: 1.6;
-  display: flex; gap: 10px; align-items: flex-start;
-}
-.info-box.note  { background: rgba(79,142,247,0.06); border: 1px solid rgba(79,142,247,0.2); color: #8ab4e8; }
-.info-box.warn  { background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.2); color: #d4a56a; }
-.info-box.tip   { background: rgba(35,209,139,0.05); border: 1px solid rgba(35,209,139,0.2); color: #7fcba8; }
-.info-box.alert { background: rgba(247,87,87,0.06); border: 1px solid rgba(247,87,87,0.2); color: #d48a8a; }
-.info-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.info-box { border-radius:8px; padding:14px 16px; margin:16px 0; font-size:12px; line-height:1.6; display:flex; gap:10px; align-items:flex-start; }
+.info-box.note  { background:rgba(79,142,247,.06); border:1px solid rgba(79,142,247,.2); color:#8ab4e8; }
+.info-box.warn  { background:rgba(245,166,35,.06); border:1px solid rgba(245,166,35,.2); color:#d4a56a; }
+.info-box.tip   { background:rgba(35,209,139,.05); border:1px solid rgba(35,209,139,.2); color:#7fcba8; }
+.info-box.alert { background:rgba(247,87,87,.06); border:1px solid rgba(247,87,87,.2); color:#d48a8a; }
+.info-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
 
-/* ── PIPELINE FLOW ── */
-.flow {
-  display: flex; flex-wrap: wrap; align-items: center;
-  gap: 6px; margin: 16px 0;
-}
-.flow-node {
-  background: var(--card); border: 1px solid var(--border2);
-  border-radius: 6px; padding: 8px 14px;
-  font-size: 11px; font-weight: 600; color: var(--bright);
-  text-align: center; min-width: 100px;
-}
-.flow-node .fn { font-family: 'JetBrains Mono'; font-size: 10px; color: var(--accent); display: block; margin-top: 2px; }
-.flow-arrow { color: var(--border2); font-size: 14px; }
+.flow { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:16px 0; }
+.flow-node { background:var(--card); border:1px solid var(--border2); border-radius:6px; padding:8px 14px; font-size:11px; font-weight:600; color:var(--bright); text-align:center; min-width:100px; }
+.flow-node .fn { font-family:'JetBrains Mono'; font-size:10px; color:var(--accent); display:block; margin-top:2px; }
+.flow-arrow { color:var(--border2); font-size:14px; }
 
-/* ── COMPARISON TABLE ── */
-.comp-table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
-.comp-table th {
-  background: rgba(79,142,247,0.08); color: var(--mid);
-  font-family: 'JetBrains Mono'; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
-  padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--border);
-}
-.comp-table td {
-  padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--mid); vertical-align: top;
-}
-.comp-table td:first-child { color: var(--bright); font-weight: 500; }
-.comp-table tr:hover td { background: rgba(255,255,255,0.02); }
-.yes { color: var(--green); font-weight: 600; }
-.partial { color: var(--gold); }
-.no  { color: var(--red); }
+.comp-table { width:100%; border-collapse:collapse; margin:12px 0; font-size:12px; }
+.comp-table th { background:rgba(79,142,247,.08); color:var(--mid); font-family:'JetBrains Mono'; font-size:10px; text-transform:uppercase; letter-spacing:.08em; padding:9px 12px; text-align:left; border-bottom:1px solid var(--border); }
+.comp-table td { padding:9px 12px; border-bottom:1px solid var(--border); color:var(--mid); vertical-align:top; }
+.comp-table td:first-child { color:var(--bright); font-weight:500; }
+.comp-table tr:hover td { background:rgba(255,255,255,.02); }
+.yes { color:var(--green); font-weight:600; }
+.partial { color:var(--gold); }
+.no  { color:var(--red); }
 
-/* ── PLUGIN TAG ── */
-.plug-tag {
-  display: inline-block;
-  font-family: 'JetBrains Mono'; font-size: 10px; font-weight: 500;
-  padding: 2px 7px; border-radius: 3px; margin: 2px 2px 2px 0;
-}
-.pt-ue  { background: rgba(79,142,247,0.1); color: #85b8ff; border: 1px solid rgba(79,142,247,0.2); }
-.pt-3rd { background: rgba(123,92,240,0.1); color: #b89cf5; border: 1px solid rgba(123,92,240,0.2); }
-.pt-free{ background: rgba(35,209,139,0.1); color: var(--green); border: 1px solid rgba(35,209,139,0.2); }
-.pt-paid{ background: rgba(245,166,35,0.08); color: var(--gold); border: 1px solid rgba(245,166,35,0.2); }
+.plug-tag { display:inline-block; font-family:'JetBrains Mono'; font-size:10px; font-weight:500; padding:2px 7px; border-radius:3px; margin:2px 2px 2px 0; }
+.pt-ue   { background:rgba(79,142,247,.1); color:#85b8ff; border:1px solid rgba(79,142,247,.2); }
+.pt-3rd  { background:rgba(123,92,240,.1); color:#b89cf5; border:1px solid rgba(123,92,240,.2); }
+.pt-free { background:rgba(35,209,139,.1); color:var(--green); border:1px solid rgba(35,209,139,.2); }
+.pt-paid { background:rgba(245,166,35,.08); color:var(--gold); border:1px solid rgba(245,166,35,.2); }
 
-/* ── DIVIDER ── */
-.divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+.back-top { display:flex; align-items:center; justify-content:center; gap:8px; margin:40px auto 0; padding:12px 24px; background:none; border:1px solid var(--border); border-radius:6px; cursor:pointer; width:fit-content; font-family:'JetBrains Mono'; font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); transition:border-color .2s, color .2s; text-decoration:none; }
+.back-top:hover { border-color:var(--accent); color:var(--accent); }
 
-/* ── FOOTER ── */
-footer {
-  border-top: 1px solid var(--border);
-  padding: 20px 40px;
-  display: flex; justify-content: space-between;
-  font-family: 'JetBrains Mono'; font-size: 10px; color: var(--muted);
-}
+footer { border-top:1px solid var(--border); padding:20px 40px; display:flex; justify-content:space-between; align-items:center; font-family:'JetBrains Mono'; font-size:10px; color:var(--muted); }
+.footer-home { display:flex; align-items:center; gap:6px; color:var(--accent); text-decoration:none; text-transform:uppercase; letter-spacing:.08em; transition:opacity .15s; }
+.footer-home:hover { opacity:.7; }
 
-@media (max-width: 680px) {
-  .nav { padding: 0 16px; gap: 16px; }
-  .nav-links { display: none; }
-  .hero, .page { padding: 28px 16px; }
-  footer { padding: 16px; flex-direction: column; gap: 4px; }
+@media (max-width:680px) {
+  .hero, .page { padding:28px 16px; }
+  footer { padding:16px; flex-direction:column; gap:4px; }
+  .hero-nav { grid-template-columns:1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-brand">LEGO × BCVR — SDK Research</div>
-  <div class="nav-links">
-    <a href="#mocap">01 MoCap SDKs</a>
-    <a href="#face">02 Face Capture</a>
-    <a href="#retarget">03 Retargeting</a>
-    <a href="#broadcast">04 Broadcast Output</a>
-    <a href="#ar">05 AR Layer</a>
-    <a href="#pipeline">06 Full Pipeline</a>
-    <a href="#flags">07 Watch-outs</a>
-  </div>
+<nav class="sticky-nav" id="top">
+  <a href="index.html" class="nav-home">⌂ Home</a>
+  <button class="nav-btn" onclick="jumpTo('c1')">01 MoCap SDKs</button>
+  <button class="nav-btn" onclick="jumpTo('c2')">02 Face Capture</button>
+  <button class="nav-btn" onclick="jumpTo('c3')">03 Retargeting</button>
+  <button class="nav-btn" onclick="jumpTo('c4')">04 Broadcast Output</button>
+  <button class="nav-btn" onclick="jumpTo('c5')">05 AR Layer</button>
+  <button class="nav-btn" onclick="jumpTo('c6')">06 Full Pipeline</button>
+  <button class="nav-btn" onclick="jumpTo('c7')">07 Watch-outs</button>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow">SDK & Implementation Research · May 2026</div>
@@ -296,301 +176,161 @@ footer {
       <span class="pill pill-gold">NDI SDK</span>
       <span class="pill pill-gold">Zero Density Reality</span>
     </div>
+    <div class="hero-nav">
+      <a class="hero-nav-btn" href="#c1"><span class="hero-nav-btn-num">01</span><span class="hero-nav-btn-label">MoCap SDKs</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#c2"><span class="hero-nav-btn-num">02</span><span class="hero-nav-btn-label">Face Capture</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#c3"><span class="hero-nav-btn-num">03</span><span class="hero-nav-btn-label">Retargeting</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#c4"><span class="hero-nav-btn-num">04</span><span class="hero-nav-btn-label">Broadcast Output</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#c5"><span class="hero-nav-btn-num">05</span><span class="hero-nav-btn-label">AR Layer</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#c6"><span class="hero-nav-btn-num">06</span><span class="hero-nav-btn-label">Full Pipeline</span><span class="hero-nav-btn-arrow">↓</span></a>
+      <a class="hero-nav-btn" href="#c7"><span class="hero-nav-btn-num">07</span><span class="hero-nav-btn-label">Watch-outs</span><span class="hero-nav-btn-arrow">↓</span></a>
+    </div>
   </div>
 </div>
 
 <div class="page">
 
-  <!-- ─────────────────────────────────── -->
-  <!-- 01 — MOCAP SDKs                    -->
-  <!-- ─────────────────────────────────── -->
-  <div class="chapter" id="mocap">
+  <!-- 01 -->
+  <div class="chapter" id="c1">
     <div class="chapter-header">
       <div class="chapter-num">01</div>
-      <div class="chapter-title-block">
-        <h2>Body Motion Capture — SDKs & Plugins</h2>
-        <p>How to get suit data from Rokoko or Xsens into Unreal Engine in real time</p>
-      </div>
+      <div class="chapter-title-block"><h2>Body Motion Capture — SDKs & Plugins</h2><p>How to get suit data from Rokoko or Xsens into Unreal Engine in real time</p></div>
     </div>
-
     <div class="sdk-grid">
-
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">🔴</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Rokoko Studio Live Plugin</div>
-            <div class="sdk-subtitle">Epic Fab Marketplace · Free</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          The official Rokoko UE plugin streams Smartsuit Pro body data and face capture directly into Unreal via Live Link. Supports UE 5.4–5.7. Provides a <strong style="color:var(--bright)">Rokoko Studio Source</strong> in the Live Link panel. Available on Epic's Fab marketplace or directly via GitHub.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-3rd">Rokoko Studio Live</span>
-          <span class="plug-tag pt-ue">Live Link</span>
-          <span class="plug-tag pt-free">Free on Fab</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">🔴</div><div><div class="sdk-name">Rokoko Studio Live Plugin</div><div class="sdk-subtitle">Epic Fab Marketplace · Free</div></div></div>
+        <div class="sdk-desc">The official Rokoko UE plugin streams Smartsuit Pro body data and face capture directly into Unreal via Live Link. Supports UE 5.4–5.7. Provides a <strong style="color:var(--bright)">Rokoko Studio Source</strong> in the Live Link panel. Available on Epic's Fab marketplace or directly via GitHub.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-3rd">Rokoko Studio Live</span><span class="plug-tag pt-ue">Live Link</span><span class="plug-tag pt-free">Free on Fab</span></div>
         <a class="sdk-link" href="https://www.unrealengine.com/marketplace/en-US/product/rokoko-studio-live" target="_blank">unrealengine.com → Rokoko Studio Live plugin</a>
-        <a class="sdk-link" href="https://github.com/Rokoko/rokoko-studio-live-unreal-engine" target="_blank" style="margin-top:4px;">github.com/Rokoko/rokoko-studio-live-unreal-engine</a>
+        <a class="sdk-link" href="https://github.com/Rokoko/rokoko-studio-live-unreal-engine" target="_blank">github.com/Rokoko/rokoko-studio-live-unreal-engine</a>
       </div>
-
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">📡</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Xsens MVN Live Link Plugin</div>
-            <div class="sdk-subtitle">Epic Fab Marketplace · Free with Xsens licence</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          Xsens (now Movella) official plugin receives real-time streams from <strong style="color:var(--bright)">MVN Animate</strong> or <strong style="color:var(--bright)">MVN Analyze</strong> software. Supports full body, fingers, props, VIVE objects. Supports UE 5.4, 5.5, 5.6, and 5.7. Blueprint remote control of MVN included. Timecode sync supported.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-3rd">MVN Live Link</span>
-          <span class="plug-tag pt-ue">Live Link</span>
-          <span class="plug-tag pt-free">Free with suit</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">📡</div><div><div class="sdk-name">Xsens MVN Live Link Plugin</div><div class="sdk-subtitle">Epic Fab Marketplace · Free with Xsens licence</div></div></div>
+        <div class="sdk-desc">Official Xsens plugin receives real-time streams from <strong style="color:var(--bright)">MVN Animate</strong> or <strong style="color:var(--bright)">MVN Analyze</strong>. Supports full body, fingers, props, VIVE objects. Supports UE 5.4–5.7. Blueprint remote control of MVN included. Timecode sync supported.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-3rd">MVN Live Link</span><span class="plug-tag pt-ue">Live Link</span><span class="plug-tag pt-free">Free with suit</span></div>
         <a class="sdk-link" href="https://www.xsens.com/integrations/unreal-engine" target="_blank">xsens.com/integrations/unreal-engine</a>
-        <a class="sdk-link" href="https://www.fab.com/listings/50d6b0a0-986a-491e-8bae-d4484a063435" target="_blank" style="margin-top:4px;">fab.com → Xsens Live Link listing</a>
+        <a class="sdk-link" href="https://www.fab.com/listings/50d6b0a0-986a-491e-8bae-d4484a063435" target="_blank">fab.com → Xsens Live Link listing</a>
       </div>
-
     </div>
-
-    <p style="font-size:13px; color:var(--mid); margin-bottom:16px;">Both systems use Unreal's native <strong style="color:var(--bright)">Live Link</strong> framework as the bridge. Here's how to set up either one:</p>
-
     <div class="code-block">
-      <div class="code-label">UNREAL ENGINE SETUP — Enable Required Plugins (Edit → Plugins)</div>
+      <div class="code-label">UNREAL ENGINE SETUP — Enable Required Plugins</div>
       <pre>
-<span class="cmt">// Required plugins to enable in your UE project:</span>
-
+<span class="cmt">// Required plugins to enable in your UE project (Edit → Plugins):</span>
 <span class="str">Live Link</span>                        <span class="cmt">// Core Live Link framework — built into UE</span>
 <span class="str">Live Link Hub</span>                    <span class="cmt">// Multi-source recording & sync (UE 5.4+)</span>
 <span class="str">Rokoko Studio Live</span>  <span class="cmt">OR</span>  <span class="str">MVN Live Link</span>   <span class="cmt">// Your mocap suit plugin</span>
-<span class="str">Apple ARKit</span>                      <span class="cmt">// Required for face capture (even on PC)</span>
+<span class="str">Apple ARKit</span>                      <span class="cmt">// Required for face capture</span>
 <span class="str">Apple ARKit Face Support</span>         <span class="cmt">// Enables ARKit blendshape parsing</span>
-<span class="str">Live Link Control Rig</span>            <span class="cmt">// Allows Control Rig + Live Link combination</span>
-<span class="str">UDP Messaging</span>                    <span class="cmt">// CRITICAL — must enable before packaging for broadcast</span>
-      </pre>
+<span class="str">Live Link Control Rig</span>            <span class="cmt">// Control Rig + Live Link combination</span>
+<span class="str">UDP Messaging</span>                    <span class="cmt">// CRITICAL — must enable before packaging</span></pre>
     </div>
-
     <div class="steps">
-      <div class="step">
-        <div class="step-content">
-          <div class="step-title">Install the plugin via Epic Fab / GitHub</div>
-          <div class="step-desc">For Rokoko: search "Rokoko Studio Live" in Fab and click Install Plugin, selecting your UE version. For Xsens: search "Xsens Live Link" on Fab. Alternatively clone the GitHub repo and place the Plugins/ folder in your UE project root.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-content">
-          <div class="step-title">Launch Rokoko Studio (or MVN Animate) and enable streaming</div>
-          <div class="step-desc">In Rokoko Studio: Settings → Plugin → Unreal Engine → enter your UE machine's IP (127.0.0.1 if same machine). Set port (default 14043). Enable "Forward to Unreal". In MVN: use the network streamer to output on the same port Unreal expects.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-content">
-          <div class="step-title">Open Live Link window in Unreal and Add Source</div>
-          <div class="step-desc">Window → Virtual Production → Live Link. Click "Add Source". For Rokoko, the Rokoko Studio Source should auto-appear. For Xsens, choose "Add → Xsens Live Source" and enter the port. You'll see the performer skeleton appear as a subject.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-content">
-          <div class="step-title">Configure rotation order (Rokoko-specific)</div>
-          <div class="step-desc">In the Live Link panel, click on the Studio subject. Set "Use Rotation Order ZYX" and add 90° Hip Pre-rotation. Skip this and characters will be rotated incorrectly on play.</div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-content">
-          <div class="step-title">Create Animation Blueprint and add Live Link Pose node</div>
-          <div class="step-desc">Right-click your character's Skeletal Mesh → Create Animation Blueprint. Inside the AnimGraph, right-click → Add "Live Link Pose" node. Set the subject name to match what appears in the Live Link panel. Wire it to Output Pose. Hit Play — your character should move with the performer.</div>
-        </div>
-      </div>
+      <div class="step"><div class="step-content"><div class="step-title">Install the plugin via Epic Fab / GitHub</div><div class="step-desc">For Rokoko: search "Rokoko Studio Live" in Fab and click Install Plugin, selecting your UE version. For Xsens: search "Xsens Live Link" on Fab. Alternatively clone the GitHub repo and place the Plugins/ folder in your UE project root.</div></div></div>
+      <div class="step"><div class="step-content"><div class="step-title">Launch Rokoko Studio (or MVN Animate) and enable streaming</div><div class="step-desc">In Rokoko Studio: Settings → Plugin → Unreal Engine → enter your UE machine's IP (127.0.0.1 if same machine). Set port (default 14043). Enable "Forward to Unreal". In MVN: use the network streamer to output on the same port Unreal expects.</div></div></div>
+      <div class="step"><div class="step-content"><div class="step-title">Open Live Link window in Unreal and Add Source</div><div class="step-desc">Window → Virtual Production → Live Link. Click "Add Source". For Rokoko, the Rokoko Studio Source should auto-appear. For Xsens, choose "Add → Xsens Live Source" and enter the port. You'll see the performer skeleton appear as a subject.</div></div></div>
+      <div class="step"><div class="step-content"><div class="step-title">Configure rotation order (Rokoko-specific)</div><div class="step-desc">In the Live Link panel, click on the Studio subject. Set "Use Rotation Order ZYX" and add 90° Hip Pre-rotation. Skip this and characters will be rotated incorrectly on play.</div></div></div>
+      <div class="step"><div class="step-content"><div class="step-title">Create Animation Blueprint and add Live Link Pose node</div><div class="step-desc">Right-click your character's Skeletal Mesh → Create Animation Blueprint. Inside the AnimGraph, right-click → Add "Live Link Pose" node. Set the subject name to match what appears in the Live Link panel. Wire it to Output Pose. Hit Play — your character should move with the performer.</div></div></div>
     </div>
-
-    <div class="info-box warn">
-      <div class="info-icon">⚠️</div>
-      <div><strong>iOS 26 compatibility issue:</strong> Recent App Store reviews (May 2026) note that the Live Link Face app crashes after 10–15 minutes on iOS 26. If using iPhones for face capture, stay on iOS 18 until Epic release a fix, or use a dedicated Android device for the POC.</div>
-    </div>
-
+    <div class="info-box warn"><div class="info-icon">⚠️</div><div><strong>iOS 26 compatibility issue:</strong> Recent App Store reviews (May 2026) note that the Live Link Face app crashes after 10–15 minutes on iOS 26. Stay on iOS 18 until Epic release a fix, or use a dedicated Android device for the POC.</div></div>
   </div>
 
-  <!-- ─────────────────────────────────── -->
-  <!-- 02 — FACE CAPTURE                  -->
-  <!-- ─────────────────────────────────── -->
-  <div class="chapter" id="face">
+  <!-- 02 -->
+  <div class="chapter" id="c2">
     <div class="chapter-header">
       <div class="chapter-num">02</div>
-      <div class="chapter-title-block">
-        <h2>Face Capture — ARKit & Live Link Face</h2>
-        <p>Real-time facial performance into Unreal Engine via iPhone or Android</p>
-      </div>
+      <div class="chapter-title-block"><h2>Face Capture — ARKit & Live Link Face</h2><p>Real-time facial performance into Unreal Engine via iPhone or Android</p></div>
     </div>
-
     <div class="sdk-grid">
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">😶</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Live Link Face App (Epic Games)</div>
-            <div class="sdk-subtitle">iOS / Android · Free</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          Free app from Epic. Uses the iPhone TrueDepth / Face ID camera and Apple ARKit to capture 52 facial blend shape coefficients — streaming them over Wi-Fi to Unreal Engine in real time. Supports timecode sync via Tentacle Sync. In UE 5.7, also supports external USB-C cameras on iPads and Android devices.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-free">Free App</span>
-          <span class="plug-tag pt-ue">ARKit 52 blendshapes</span>
-          <span class="plug-tag pt-ue">Timecode support</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">😶</div><div><div class="sdk-name">Live Link Face App (Epic Games)</div><div class="sdk-subtitle">iOS / Android · Free</div></div></div>
+        <div class="sdk-desc">Free app from Epic. Uses the iPhone TrueDepth / Face ID camera and Apple ARKit to capture 52 facial blend shape coefficients — streaming them over Wi-Fi to Unreal Engine in real time. Supports timecode sync via Tentacle Sync. In UE 5.7, also supports external USB-C cameras on iPads and Android devices.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-free">Free App</span><span class="plug-tag pt-ue">ARKit 52 blendshapes</span><span class="plug-tag pt-ue">Timecode support</span></div>
         <a class="sdk-link" href="https://apps.apple.com/us/app/live-link-face/id1495370836" target="_blank">App Store → Live Link Face</a>
       </div>
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">🎭</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Apple ARKit (UE Plugin)</div>
-            <div class="sdk-subtitle">Built into Unreal Engine · Free</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          Built into UE5. Parses the 52 ARKit blend shape values coming from the Live Link Face app and applies them to any ARKit-compatible character rig. LEGO characters will need ARKit blendshapes authored on their face mesh for this to work — this is a key build task.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-ue">Built into UE</span>
-          <span class="plug-tag pt-free">No cost</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">🎭</div><div><div class="sdk-name">Apple ARKit (UE Plugin)</div><div class="sdk-subtitle">Built into Unreal Engine · Free</div></div></div>
+        <div class="sdk-desc">Built into UE5. Parses the 52 ARKit blend shape values coming from the Live Link Face app and applies them to any ARKit-compatible character rig. LEGO characters will need ARKit blendshapes authored on their face mesh for this to work — a key build task in Week 3–4.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-ue">Built into UE</span><span class="plug-tag pt-free">No cost</span></div>
         <a class="sdk-link" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/recording-face-animation-on-ios-device-in-unreal-engine" target="_blank">Epic Docs → Face Animation on iOS</a>
       </div>
     </div>
-
-    <div class="info-box note">
-      <div class="info-icon">💡</div>
-      <div><strong>Key LEGO-specific task:</strong> MetaHumans have 52 ARKit blendshapes pre-built by Epic, so face capture works out of the box. Your LEGO characters will need ARKit blendshapes <em>manually authored</em> on the face mesh — this is an art task, not a technical one, but it's a build step that needs to be scoped into Week 3–4 of the timeline.</div>
-    </div>
-
+    <div class="info-box note"><div class="info-icon">💡</div><div><strong>Key LEGO-specific task:</strong> MetaHumans have 52 ARKit blendshapes pre-built by Epic, so face capture works out of the box. Your LEGO characters will need ARKit blendshapes <em>manually authored</em> on the face mesh — an art task scoped into Week 3–4.</div></div>
     <div class="code-block">
       <div class="code-label">FACE CAPTURE SETUP — Step by Step</div>
       <pre>
 <span class="cmt">// iPhone setup</span>
 <span class="num">1.</span> Install Live Link Face app (App Store, free)
-<span class="num">2.</span> Connect iPhone to same Wi-Fi network as Unreal Engine machine
+<span class="num">2.</span> Connect iPhone to same Wi-Fi as Unreal Engine machine
 <span class="num">3.</span> In app: Settings → set UE machine IP address, port 11111 (default)
 <span class="num">4.</span> Start streaming in app
 
 <span class="cmt">// Unreal Engine setup</span>
 <span class="num">5.</span> Enable plugins: Apple ARKit + Apple ARKit Face Support + Live Link
 <span class="num">6.</span> Window → Virtual Production → Live Link
-<span class="num">7.</span> "Add Source" → iPhone should appear automatically as a subject
+<span class="num">7.</span> "Add Source" → iPhone appears automatically as subject
 <span class="num">8.</span> Subject name typically shown as "iPhone" (or device name)
 
 <span class="cmt">// Applying to LEGO character</span>
-<span class="num">9.</span> In your character's AnimBP, add Live Link Pose node for face subject
-<span class="num">10.</span> Map ARKit curve names to LEGO face blendshapes via curve remapping
-<span class="num">11.</span> Use "Live Link Remap Asset" to translate standard ARKit names
-<span class="num">     to your LEGO character's custom morph target names</span>
+<span class="num">9.</span>  Add Live Link Pose node in AnimBP for face subject
+<span class="num">10.</span> Map ARKit curve names to LEGO face blendshapes
+<span class="num">11.</span> Use Live Link Remap Asset to translate ARKit names to LEGO morph targets
 
 <span class="cmt">// Body + Face sync (running simultaneously)</span>
-<span class="num">12.</span> In AnimBP: two Live Link Pose nodes — one for body (suit), one for face (iPhone)
-<span class="num">13.</span> Use Live Link Hub (UE 5.4+) to record and sync both streams with timecode
-      </pre>
+<span class="num">12.</span> Two Live Link Pose nodes in AnimBP — one body (suit), one face (iPhone)
+<span class="num">13.</span> Use Live Link Hub (UE 5.4+) to record and sync both streams with timecode</pre>
     </div>
-
   </div>
 
-  <!-- ─────────────────────────────────── -->
-  <!-- 03 — RETARGETING (LEGO RIG)        -->
-  <!-- ─────────────────────────────────── -->
-  <div class="chapter" id="retarget">
+  <!-- 03 -->
+  <div class="chapter" id="c3">
     <div class="chapter-header">
       <div class="chapter-num">03</div>
-      <div class="chapter-title-block">
-        <h2>LEGO Character Retargeting — IK Rig System</h2>
-        <p>Translating human mocap proportions to LEGO minifigure skeleton in real time</p>
-      </div>
+      <div class="chapter-title-block"><h2>LEGO Character Retargeting — IK Rig System</h2><p>Translating human mocap proportions to LEGO minifigure skeleton in real time</p></div>
     </div>
-
-    <p style="font-size:13px; color:var(--mid); margin-bottom:16px;">This is the most custom-build-intensive part of the pipeline. UE5's <strong style="color:var(--bright)">IK Rig + IK Retargeter</strong> system is the primary tool. UE 5.7 added Spatially Aware Retargeting — which specifically helps with characters of very different proportions (e.g. giant-to-dwarf) — directly applicable to human→LEGO retargeting.</p>
-
+    <p style="font-size:13px;color:var(--mid);margin-bottom:16px;">UE5's <strong style="color:var(--bright)">IK Rig + IK Retargeter</strong> system is the primary tool. UE 5.7 added Spatially Aware Retargeting specifically for characters with very different proportions — directly applicable to human→LEGO retargeting.</p>
     <div class="sdk-grid">
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">🦴</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">IK Rig & IK Retargeter</div>
-            <div class="sdk-subtitle">Built into UE5 · Free</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          UE5's native retargeting system. Define bone chains on both the source (human mocap skeleton) and target (LEGO skeleton). The Retargeter maps motion between them, handling proportion differences, joint constraints, and foot/hand contact. <em>Build once, applies to all animations from that source.</em>
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-ue">IK Rig</span>
-          <span class="plug-tag pt-ue">IK Retargeter</span>
-          <span class="plug-tag pt-free">Built into UE5</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">🦴</div><div><div class="sdk-name">IK Rig & IK Retargeter</div><div class="sdk-subtitle">Built into UE5 · Free</div></div></div>
+        <div class="sdk-desc">UE5's native retargeting system. Define bone chains on both the source (human mocap skeleton) and target (LEGO skeleton). The Retargeter maps motion between them, handling proportion differences, joint constraints, and foot/hand contact. Build once, applies to all animations from that source.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-ue">IK Rig</span><span class="plug-tag pt-ue">IK Retargeter</span><span class="plug-tag pt-free">Built into UE5</span></div>
         <a class="sdk-link" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/ik-rig-animation-retargeting-in-unreal-engine" target="_blank">Epic Docs → IK Rig Retargeting</a>
       </div>
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">⚙️</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Control Rig</div>
-            <div class="sdk-subtitle">Built into UE5 · Free</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          Used on top of the retargeter to add the LEGO <em>stylization layer</em> — the squash/stretch, timing exaggeration, and joint constraint clamping that makes the movement feel authentically LEGO rather than just "a tiny human". Essential for the POC quality target.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-ue">Control Rig</span>
-          <span class="plug-tag pt-free">Built into UE5</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">⚙️</div><div><div class="sdk-name">Control Rig</div><div class="sdk-subtitle">Built into UE5 · Free</div></div></div>
+        <div class="sdk-desc">Used on top of the retargeter to add the LEGO <em>stylization layer</em> — the squash/stretch, timing exaggeration, and joint constraint clamping that makes movement feel authentically LEGO rather than just "a tiny human".</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-ue">Control Rig</span><span class="plug-tag pt-free">Built into UE5</span></div>
         <a class="sdk-link" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/control-rig-in-unreal-engine" target="_blank">Epic Docs → Control Rig</a>
       </div>
     </div>
-
     <div class="code-block">
       <div class="code-label">RETARGETING WORKFLOW — Human Mocap → LEGO Skeleton</div>
       <pre>
 <span class="cmt">// PHASE 1: Build the LEGO IK Rig (do once)</span>
 <span class="num">1.</span> Import LEGO character FBX with custom skeleton into UE
 <span class="num">2.</span> Right-click LEGO Skeleton → Create IK Rig
-<span class="num">3.</span> In IK Rig editor, define bone chains:
-     Spine chain:    Pelvis → Spine_01 → Spine_02 → Neck → Head
-     Left arm:       Clavicle_L → UpperArm_L → LowerArm_L → Hand_L
-     Right arm:      (mirror of above)
-     Left leg:       Thigh_L → Calf_L → Foot_L
-     Right leg:      (mirror of above)
-<span class="num">4.</span> Set LEGO-specific joint limits (e.g. no wrist rotation, limited elbow bend)
+<span class="num">3.</span> Define bone chains: Spine, Left/Right arms, Left/Right legs
+<span class="num">4.</span> Set LEGO-specific joint limits (no wrist rotation, limited elbow bend)
 <span class="num">5.</span> Add Full Body IK goal for foot grounding
 
-<span class="cmt">// PHASE 2: Build IK Rig for the mocap source skeleton (Rokoko/Xsens)</span>
-<span class="num">6.</span> Create IK Rig for the source skeleton coming from the suit
-<span class="num">7.</span> Define the same chain structure (UE preset naming convention works well)
+<span class="cmt">// PHASE 2: Build IK Rig for the mocap source skeleton</span>
+<span class="num">6.</span> Create IK Rig for the source skeleton from the suit
+<span class="num">7.</span> Define the same chain structure (UE preset naming works well)
 
 <span class="cmt">// PHASE 3: Create the IK Retargeter</span>
 <span class="num">8.</span> Right-click in Content Browser → Create IK Retargeter
 <span class="num">9.</span> Assign Source IK Rig (human) and Target IK Rig (LEGO)
-<span class="num">10.</span> Use alignment tools to match root positions
-<span class="num">11.</span> Enable Spatially Aware Retargeting (UE 5.7) for proportion difference handling
-<span class="num">12.</span> Adjust Target Actor Scale if needed; test in Preview window
+<span class="num">10.</span> Enable Spatially Aware Retargeting (UE 5.7) for proportion handling
+<span class="num">11.</span> Adjust Target Actor Scale; test in Preview window
 
 <span class="cmt">// PHASE 4: Live retargeting via Animation Blueprint</span>
-<span class="num">13.</span> In LEGO character AnimBP: receive Live Link body data
-<span class="num">14.</span> Pass through Retarget Component referencing the IK Retargeter
-<span class="num">15.</span> Layer Control Rig on top for stylization (squash, timing, constraints)
-<span class="num">16.</span> Output Pose → character moves in real time
-      </pre>
+<span class="num">12.</span> In LEGO character AnimBP: receive Live Link body data
+<span class="num">13.</span> Pass through Retarget Component → IK Retargeter
+<span class="num">14.</span> Layer Control Rig for stylization (squash, timing, constraints)
+<span class="num">15.</span> Output Pose → character moves in real time</pre>
     </div>
-
-    <div class="info-box tip">
-      <div class="info-icon">✅</div>
-      <div><strong>UE 5.7 advantage:</strong> The new Spatially Aware Retargeting feature in 5.7 is specifically designed to reduce self-collision and artifacts when retargeting between characters of very different scale and proportions. This is directly relevant to human→LEGO retargeting and should be the target engine version for this pipeline.</div>
-    </div>
-
+    <div class="info-box tip"><div class="info-icon">✅</div><div><strong>UE 5.7 advantage:</strong> Spatially Aware Retargeting reduces self-collision and artifacts when retargeting between characters of very different scale and proportions. Target UE 5.7 from day one.</div></div>
     <table class="comp-table">
-      <thead><tr><th>Requirement</th><th>Tool</th><th>Works Out of Box?</th><th>Custom Build Needed?</th></tr></thead>
+      <thead><tr><th>Requirement</th><th>Tool</th><th>Out of Box?</th><th>Custom Build?</th></tr></thead>
       <tbody>
         <tr><td>Human body → LEGO body motion</td><td>IK Retargeter</td><td class="yes">Yes</td><td>LEGO IK Rig setup (~1 day)</td></tr>
         <tr><td>Proportion differences (short/wide)</td><td>Spatially Aware Retargeting (5.7)</td><td class="partial">Mostly</td><td>Fine-tune scale + chain settings</td></tr>
@@ -599,290 +339,146 @@ footer {
         <tr><td>Face expression → LEGO face</td><td>ARKit → Custom Blendshapes</td><td class="no">No</td><td>Author 52 blendshapes on LEGO head</td></tr>
       </tbody>
     </table>
-
   </div>
 
-  <!-- ─────────────────────────────────── -->
-  <!-- 04 — BROADCAST OUTPUT              -->
-  <!-- ─────────────────────────────────── -->
-  <div class="chapter" id="broadcast">
+  <!-- 04 -->
+  <div class="chapter" id="c4">
     <div class="chapter-header">
       <div class="chapter-num">04</div>
-      <div class="chapter-title-block">
-        <h2>Broadcast Output — NDI, Alpha Feeds & Live Switching</h2>
-        <p>Getting Unreal's output onto air and into downstream broadcast systems</p>
-      </div>
+      <div class="chapter-title-block"><h2>Broadcast Output — NDI, Alpha Feeds & Live Switching</h2><p>Getting Unreal's output onto air and into downstream broadcast systems</p></div>
     </div>
-
     <div class="sdk-grid">
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">📺</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">NDI Unreal Engine SDK</div>
-            <div class="sdk-subtitle">NDI (Vizrt) · Free SDK</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          Adds full IP video/audio support within Unreal Engine 5.6+. Enables UE to <strong style="color:var(--bright)">send and receive</strong> video streams over IP — including alpha channel — up to 4K. You can add <em>NDI Broadcast Actors</em> to the level (one per camera) and stream each to separate NDI channels simultaneously. Downstream tools like vMix, OBS, or dedicated broadcast switchers receive these feeds.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-free">Free SDK</span>
-          <span class="plug-tag pt-gold">NDI Protocol</span>
-          <span class="plug-tag pt-ue">UE 5.6+</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">📺</div><div><div class="sdk-name">NDI Unreal Engine SDK</div><div class="sdk-subtitle">NDI (Vizrt) · Free SDK</div></div></div>
+        <div class="sdk-desc">Adds full IP video/audio support within Unreal Engine 5.6+. Enables UE to <strong style="color:var(--bright)">send and receive</strong> video streams over IP — including alpha channel — up to 4K. Add NDI Broadcast Actors to the level (one per camera) and stream each to separate NDI channels simultaneously.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-free">Free SDK</span><span class="plug-tag pt-gold">NDI Protocol</span><span class="plug-tag pt-ue">UE 5.6+</span></div>
         <a class="sdk-link" href="https://ndi.video/for-developers/ndi-unreal-engine-sdk/" target="_blank">ndi.video/for-developers/ndi-unreal-engine-sdk</a>
       </div>
-
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">🎬</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Unreal Motion Design / Broadcast Mode</div>
-            <div class="sdk-subtitle">Built into UE5 · Free</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          UE5's Motion Design tools (formerly Motion Design plugin) enable broadcast-style graphics, lower thirds, stingers, and overlays built directly inside Unreal — no external graphics system needed for the POC. Operators can trigger and control these via OSC or Blueprint from a production desk.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-ue">Motion Design</span>
-          <span class="plug-tag pt-free">Built into UE5</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">🎬</div><div><div class="sdk-name">Unreal Motion Design</div><div class="sdk-subtitle">Built into UE5 · Free</div></div></div>
+        <div class="sdk-desc">UE5's broadcast-style graphics tools — lower thirds, stingers, and overlays built directly inside Unreal. No external graphics system needed for the POC. Operators can trigger and control via OSC or Blueprint from a production desk.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-ue">Motion Design</span><span class="plug-tag pt-free">Built into UE5</span></div>
         <a class="sdk-link" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/motion-design-in-unreal-engine" target="_blank">Epic Docs → Motion Design</a>
       </div>
-
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">🔀</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">vMix / OBS (Production Switcher)</div>
-            <div class="sdk-subtitle">3rd Party · vMix from $60 one-time</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          Receives NDI streams from Unreal (LEGO characters, sports footage, graphics). Acts as the production switcher for the POC — handling camera cuts, transitions, scene presets, and final programme output. vMix is the industry standard for this. OBS is free but less robust under live pressure.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-gold">NDI compatible</span>
-          <span class="plug-tag pt-paid">vMix licence</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">🔀</div><div><div class="sdk-name">vMix / OBS (Production Switcher)</div><div class="sdk-subtitle">3rd Party · vMix from $60 one-time</div></div></div>
+        <div class="sdk-desc">Receives NDI streams from Unreal (LEGO characters, sports footage, graphics). Acts as the production switcher — handling camera cuts, transitions, scene presets, and final programme output. vMix is the industry standard for this workflow.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-gold">NDI compatible</span><span class="plug-tag pt-paid">vMix licence</span></div>
         <a class="sdk-link" href="https://www.vmix.com" target="_blank">vmix.com</a>
       </div>
-
     </div>
-
     <div class="code-block">
       <div class="code-label">NDI OUTPUT SETUP — Unreal Engine to vMix/Switcher</div>
       <pre>
-<span class="cmt">// Install NDI SDK</span>
 <span class="num">1.</span> Download NDI Unreal Engine SDK from ndi.video/for-developers
 <span class="num">2.</span> Place plugin in your UE project's Plugins/ folder
 <span class="num">3.</span> Enable "NDI IO Plugin" in UE Plugins panel — restart UE
 
 <span class="cmt">// Set up multiple NDI output streams (one per virtual camera)</span>
-<span class="num">4.</span> In Level, open Place Actors → search "NDI Broadcast Actor"
+<span class="num">4.</span> In Level, Place Actors → search "NDI Broadcast Actor"
 <span class="num">5.</span> Drop one per camera angle (Wide, Medium, Close-up)
-<span class="num">6.</span> For each actor, create an NDI Media Sender asset:
-     Stream name: "UE_Wide", "UE_Medium", "UE_CloseUp"
-     Resolution: 1920x1080 @ 50/60fps
-<span class="num">7.</span> For alpha/keyed output: add an alpha channel pass to the render target
-<span class="num">8.</span> Enable "Begin Broadcast On Play" in Project Settings → NDI
+<span class="num">6.</span> For each: create NDI Media Sender asset with stream name + resolution
+<span class="num">7.</span> Enable "Begin Broadcast On Play" in Project Settings → NDI
 
-<span class="cmt">// In vMix (or any NDI-compatible switcher)</span>
-<span class="num">9.</span>  Add Input → NDI → search for "UE_Wide" etc. on the network
-<span class="num">10.</span> Add second input for live sports footage (from sports feed or file)
-<span class="num">11.</span> Composite LEGO characters over sports using vMix Chroma Key or Alpha channel
-<span class="num">12.</span> Set up scene presets: Wide 2-shot, Medium single, Close-up, Replay
-<span class="num">13.</span> Output to streaming encoder, record, and social clip simultaneously
-      </pre>
+<span class="cmt">// In vMix</span>
+<span class="num">8.</span>  Add Input → NDI → search for "UE_Wide" etc. on the network
+<span class="num">9.</span>  Add second input for live sports footage
+<span class="num">10.</span> Composite LEGO characters over sports using vMix Alpha channel
+<span class="num">11.</span> Set up scene presets: Wide 2-shot, Medium single, Close-up, Replay
+<span class="num">12.</span> Output to streaming encoder, record, and social clip simultaneously</pre>
     </div>
-
-    <div class="info-box tip">
-      <div class="info-icon">✅</div>
-      <div><strong>Multi-channel NDI in UE 5.7:</strong> A recent Epic tutorial (Nov 2025) demonstrates broadcasting multiple NDI channels live from UE 5.7 simultaneously — perfect for POC multi-camera output without any external hardware capture cards.</div>
-    </div>
-
   </div>
 
-  <!-- ─────────────────────────────────── -->
-  <!-- 05 — AR LAYER                      -->
-  <!-- ─────────────────────────────────── -->
-  <div class="chapter" id="ar">
+  <!-- 05 -->
+  <div class="chapter" id="c5">
     <div class="chapter-header">
       <div class="chapter-num">05</div>
-      <div class="chapter-title-block">
-        <h2>AR Layer — Real-Time Compositing & Broadcast AR</h2>
-        <p>Overlaying LEGO characters and graphics onto live sports footage</p>
-      </div>
+      <div class="chapter-title-block"><h2>AR Layer — Real-Time Compositing & Broadcast AR</h2><p>Overlaying LEGO characters and graphics onto live sports footage</p></div>
     </div>
-
-    <p style="font-size:13px; color:var(--mid); margin-bottom:20px;">There are two approaches for AR compositing. For the POC, <strong style="color:var(--bright)">Approach A (Composure in UE)</strong> is the fastest and cheapest path. <strong style="color:var(--bright)">Approach B (Zero Density Reality)</strong> is the broadcast-grade production path for full deployment.</p>
-
+    <p style="font-size:13px;color:var(--mid);margin-bottom:20px;"><strong style="color:var(--bright)">Approach A (Composure in UE)</strong> is the fastest and cheapest POC path. <strong style="color:var(--bright)">Approach B (Zero Density Reality)</strong> is the broadcast-grade production path for full deployment.</p>
     <div class="sdk-grid">
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">🎭</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Composure (Built into UE5)</div>
-            <div class="sdk-subtitle">Approach A — POC path · Free</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          Unreal's built-in real-time compositing framework. Can receive live video input (via NDI or capture card), composite the LEGO characters and CG elements over it, and output a final mixed frame — all inside UE without external software. Sufficient for the 2-minute POC.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-ue">Composure Plugin</span>
-          <span class="plug-tag pt-free">Built into UE5</span>
-          <span class="plug-tag pt-free">POC path</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">🎭</div><div><div class="sdk-name">Composure (Built into UE5)</div><div class="sdk-subtitle">Approach A — POC path · Free</div></div></div>
+        <div class="sdk-desc">Unreal's built-in real-time compositing framework. Receives live video input (via NDI or capture card), composites the LEGO characters and CG elements over it, and outputs a final mixed frame — all inside UE without external software. Sufficient for the 2-minute POC.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-ue">Composure Plugin</span><span class="plug-tag pt-free">Built into UE5</span></div>
         <a class="sdk-link" href="https://dev.epicgames.com/documentation/en-us/unreal-engine/composure-overview-for-unreal-engine" target="_blank">Epic Docs → Composure Overview</a>
       </div>
-
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">📡</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Zero Density Reality 5 (+ Lino)</div>
-            <div class="sdk-subtitle">Approach B — Full broadcast · Licensed</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          The industry standard for broadcast AR/XR production (used on FIFA World Cup, Super Bowl, Olympics). UE5-native platform with professional keying, node-based compositing, camera tracking, and real-time data integration. Reality 5.6 added Lino — a unified template-based workflow for 2D/3D overlays, AR, and virtual set graphics from a single control interface. Used by Fox Sports, RTL, The Weather Channel.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-paid">Licensed product</span>
-          <span class="plug-tag pt-ue">UE5 native</span>
-          <span class="plug-tag pt-gold">Broadcast grade</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">📡</div><div><div class="sdk-name">Zero Density Reality 5 (+ Lino)</div><div class="sdk-subtitle">Approach B — Full broadcast · Licensed</div></div></div>
+        <div class="sdk-desc">Industry standard for broadcast AR/XR (FIFA World Cup, Super Bowl, Olympics). UE5-native platform with professional keying, node-based compositing, camera tracking, and real-time data. Reality 5.6 added Lino — a unified template-based workflow for 2D/3D overlays, AR, XR from a single control interface.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-paid">Licensed</span><span class="plug-tag pt-ue">UE5 native</span><span class="plug-tag pt-gold">Broadcast grade</span></div>
         <a class="sdk-link" href="https://www.zerodensity.io" target="_blank">zerodensity.io → Reality platform</a>
       </div>
-
       <div class="sdk-card">
-        <div class="sdk-head">
-          <div class="sdk-icon">📷</div>
-          <div class="sdk-title-block">
-            <div class="sdk-name">Ncam AR Suite (UE Plugin)</div>
-            <div class="sdk-subtitle">Approach B alt · Licensed</div>
-          </div>
-        </div>
-        <div class="sdk-desc">
-          An automated UE5 AR pipeline bridge. Connects real-time camera tracking data directly to Unreal Engine for film, TV and broadcast AR. Updated for UE5 with SDKLite protocol, wireless operation, and Epic's built-in lens distortion framework. Used on Amazon and Warner Bros productions.
-        </div>
-        <div style="margin-bottom:10px;">
-          <span class="plug-tag pt-paid">Licensed</span>
-          <span class="plug-tag pt-ue">UE5 plugin</span>
-          <span class="plug-tag pt-gold">Camera tracking</span>
-        </div>
+        <div class="sdk-head"><div class="sdk-icon">📷</div><div><div class="sdk-name">Ncam AR Suite (UE Plugin)</div><div class="sdk-subtitle">Approach B alt · Licensed</div></div></div>
+        <div class="sdk-desc">Automated UE5 AR pipeline bridge connecting real-time camera tracking to Unreal for film, TV and broadcast AR. Updated for UE5 with SDKLite protocol, wireless operation, and Epic's built-in lens distortion framework. Used on Amazon and Warner Bros productions.</div>
+        <div style="margin-bottom:10px;"><span class="plug-tag pt-paid">Licensed</span><span class="plug-tag pt-ue">UE5 plugin</span></div>
         <a class="sdk-link" href="https://www.ncam-tech.com" target="_blank">ncam-tech.com</a>
       </div>
-
     </div>
-
     <div class="code-block">
       <div class="code-label">POC AR SETUP — Composure Approach (Inside UE5)</div>
       <pre>
-<span class="cmt">// Enable Composure Plugin</span>
-<span class="num">1.</span> Edit → Plugins → search "Composure" → Enable → Restart UE
+<span class="num">1.</span> Edit → Plugins → "Composure" → Enable → Restart UE
 
 <span class="cmt">// Bring in live sports footage as video input</span>
-<span class="num">2.</span> Option A — Use NDI to receive sports footage feed into UE:
-     Add NDI Receive Actor → point to sports footage NDI source
-<span class="num">3.</span> Option B — Use Media Framework with video file (for POC testing):
-     Create Media Source (file) → Media Player → Media Texture
+<span class="num">2.</span> Option A — NDI Receive Actor → point to sports footage NDI source
+<span class="num">3.</span> Option B — Media Framework with video file (for POC testing)
 
 <span class="cmt">// Build the compositing tree</span>
-<span class="num">4.</span> Window → Composure
-<span class="num">5.</span> Create Comp Shot → add layers:
-     Layer 1: Background plate (sports footage video input)
-     Layer 2: CG characters (LEGO announcers from UE scene)
+<span class="num">4.</span> Window → Composure → Create Comp Shot → add layers:
+     Layer 1: Background plate (sports footage)
+     Layer 2: CG characters (LEGO announcers)
      Layer 3: Graphics overlays (score bugs, lower thirds)
-<span class="num">6.</span> For each CG layer: set up alpha keying / matte output
-<span class="num">7.</span> Apply colour matching between CG and video plate if needed
-
-<span class="cmt">// Real-time depth / occlusion (advanced — Phase 3+)</span>
-<span class="num">8.</span> For objects appearing IN FRONT OF real-world elements:
-     Use depth pass + holdout mattes from Composure
-     Or use Zero Density's proprietary depth compositor (Phase 3+)
+<span class="num">5.</span> Set up alpha keying / matte output for each CG layer
 
 <span class="cmt">// Output the composite</span>
-<span class="num">9.</span> Route Composure output to NDI Broadcast Actor
-<span class="num">10.</span> This single "final composite" stream goes to vMix programme output
-      </pre>
+<span class="num">6.</span> Route Composure output to NDI Broadcast Actor
+<span class="num">7.</span> This "final composite" stream goes to vMix programme output</pre>
     </div>
-
-    <div class="info-box note">
-      <div class="info-icon">💡</div>
-      <div><strong>Zero Density at NAB 2025:</strong> ZD demonstrated Reality 5.6 turning a compact LED stage into a full-scale virtual sports studio, with AR graphics controlled through a web-based interface using commands like "take in" and "take next". This is what Phase 3+ of the roadmap looks like — worth an evaluation conversation with ZD early.</div>
-    </div>
-
   </div>
 
-  <!-- ─────────────────────────────────── -->
-  <!-- 06 — FULL PIPELINE DIAGRAM         -->
-  <!-- ─────────────────────────────────── -->
-  <div class="chapter" id="pipeline">
+  <!-- 06 -->
+  <div class="chapter" id="c6">
     <div class="chapter-header">
       <div class="chapter-num">06</div>
-      <div class="chapter-title-block">
-        <h2>The Complete Technical Pipeline</h2>
-        <p>Every system, SDK and connection from suit to broadcast output</p>
-      </div>
+      <div class="chapter-title-block"><h2>The Complete Technical Pipeline</h2><p>Every system, SDK and connection from suit to broadcast output</p></div>
     </div>
-
-    <p style="font-size:13px; color:var(--mid); margin-bottom:20px;">How all the SDKs connect together from the performer's body to the final broadcast frame:</p>
-
     <div style="margin-bottom:20px;">
-      <p style="font-size:11px; font-family:'JetBrains Mono'; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px;">Body Mocap Chain</p>
+      <p style="font-size:11px;font-family:'JetBrains Mono';color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Body Mocap Chain</p>
       <div class="flow">
-        <div class="flow-node">Rokoko Smartsuit<span class="fn">Wireless inertial</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">Rokoko Studio<span class="fn">Capture software</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">Live Link (UDP)<span class="fn">Port 14043</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">UE5 Live Link<span class="fn">Rokoko Source</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">AnimBP + IK Retargeter<span class="fn">LEGO skeleton</span></div>
-        <div class="flow-arrow">→</div>
+        <div class="flow-node">Rokoko Smartsuit<span class="fn">Wireless inertial</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">Rokoko Studio<span class="fn">Capture software</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">Live Link (UDP)<span class="fn">Port 14043</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">UE5 Live Link<span class="fn">Rokoko Source</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">AnimBP + IK Retargeter<span class="fn">LEGO skeleton</span></div><div class="flow-arrow">→</div>
         <div class="flow-node">Control Rig<span class="fn">LEGO stylization</span></div>
       </div>
     </div>
-
     <div style="margin-bottom:20px;">
-      <p style="font-size:11px; font-family:'JetBrains Mono'; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px;">Face Capture Chain</p>
+      <p style="font-size:11px;font-family:'JetBrains Mono';color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Face Capture Chain</p>
       <div class="flow">
-        <div class="flow-node">iPhone + Face ID<span class="fn">TrueDepth camera</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">Live Link Face App<span class="fn">ARKit 52 shapes</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">Wi-Fi (UDP)<span class="fn">Port 11111</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">UE5 Live Link<span class="fn">ARKit source</span></div>
-        <div class="flow-arrow">→</div>
+        <div class="flow-node">iPhone + Face ID<span class="fn">TrueDepth camera</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">Live Link Face App<span class="fn">ARKit 52 shapes</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">Wi-Fi (UDP)<span class="fn">Port 11111</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">UE5 Live Link<span class="fn">ARKit source</span></div><div class="flow-arrow">→</div>
         <div class="flow-node">LEGO Face Blendshapes<span class="fn">Custom morph targets</span></div>
       </div>
     </div>
-
     <div style="margin-bottom:20px;">
-      <p style="font-size:11px; font-family:'JetBrains Mono'; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px;">Render & Output Chain</p>
+      <p style="font-size:11px;font-family:'JetBrains Mono';color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;">Render & Output Chain</p>
       <div class="flow">
-        <div class="flow-node">UE5 Scene<span class="fn">LEGO chars + virtual set</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">Composure<span class="fn">AR composite</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">NDI SDK<span class="fn">Multi-channel IP</span></div>
-        <div class="flow-arrow">→</div>
-        <div class="flow-node">vMix / Switcher<span class="fn">Live switching</span></div>
-        <div class="flow-arrow">→</div>
+        <div class="flow-node">UE5 Scene<span class="fn">LEGO chars + virtual set</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">Composure<span class="fn">AR composite</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">NDI SDK<span class="fn">Multi-channel IP</span></div><div class="flow-arrow">→</div>
+        <div class="flow-node">vMix / Switcher<span class="fn">Live switching</span></div><div class="flow-arrow">→</div>
         <div class="flow-node">Programme Output<span class="fn">Stream / Record / Social</span></div>
       </div>
     </div>
-
     <div class="code-block">
       <div class="code-label">COMPLETE PLUGIN LIST — what to install in the UE project</div>
       <pre>
-<span class="cmt">// BUILT INTO UE5 — just enable in Project Settings → Plugins</span>
+<span class="cmt">// BUILT INTO UE5 — enable in Project Settings → Plugins</span>
 <span class="str">Live Link</span>                   <span class="cmt">Core mocap streaming framework</span>
 <span class="str">Live Link Hub</span>               <span class="cmt">Multi-source sync and recording (UE 5.4+)</span>
 <span class="str">Live Link Control Rig</span>       <span class="cmt">Control Rig + Live Link combination</span>
@@ -890,7 +486,6 @@ footer {
 <span class="str">Apple ARKit Face Support</span>    <span class="cmt">Extended ARKit face shapes</span>
 <span class="str">Composure</span>                   <span class="cmt">Real-time AR compositing</span>
 <span class="str">Motion Design</span>               <span class="cmt">Broadcast graphics and overlays</span>
-<span class="str">IK Rig / IK Retargeter</span>     <span class="cmt">Built into animation system</span>
 <span class="str">UDP Messaging</span>               <span class="cmt">REQUIRED for packaged broadcast build</span>
 <span class="str">Virtual Camera</span>              <span class="cmt">Virtual camera presets and switching</span>
 
@@ -899,77 +494,56 @@ footer {
   <span class="cmt">OR</span>
 <span class="str">Xsens MVN Live Link</span>         <span class="cmt">Body mocap → Live Link (free with suit)</span>
 
-<span class="cmt">// INSTALL FROM SDK / MANUAL</span>
-<span class="str">NDI IO Plugin</span>               <span class="cmt">IP video output to switcher (free SDK from ndi.video)</span>
+<span class="cmt">// INSTALL FROM SDK</span>
+<span class="str">NDI IO Plugin</span>               <span class="cmt">IP video output to switcher (free from ndi.video)</span>
 
 <span class="cmt">// PHASE 3+ (full broadcast deployment)</span>
-<span class="str">Zero Density Reality 5</span>      <span class="cmt">Professional AR/XR compositing (licensed)</span>
-  <span class="cmt">OR</span>
-<span class="str">Ncam AR Suite</span>               <span class="cmt">Camera tracking + AR pipeline (licensed)</span>
-      </pre>
+<span class="str">Zero Density Reality 5</span>      <span class="cmt">Professional AR/XR compositing (licensed)</span></pre>
     </div>
-
   </div>
 
-  <!-- ─────────────────────────────────── -->
-  <!-- 07 — WATCH-OUTS                    -->
-  <!-- ─────────────────────────────────── -->
-  <div class="chapter" id="flags">
+  <!-- 07 -->
+  <div class="chapter" id="c7">
     <div class="chapter-header">
       <div class="chapter-num">07</div>
-      <div class="chapter-title-block">
-        <h2>Key Watch-outs & Technical Flags</h2>
-        <p>Issues identified through research that need active management</p>
-      </div>
+      <div class="chapter-title-block"><h2>Key Watch-outs & Technical Flags</h2><p>Issues identified through research that need active management</p></div>
     </div>
-
-    <div style="display:flex; flex-direction:column; gap:10px;">
-
-      <div class="info-box alert">
-        <div class="info-icon">🔴</div>
-        <div><strong>iOS 26 / Live Link Face crash:</strong> Multiple App Store reviews (May 2026) confirm the Live Link Face app crashes after 10–15 minutes on iOS 26. Don't upgrade performer iPhones — stay on iOS 18 — or switch to Android devices for face capture until Epic release a patch. <em>Flag this to the talent team now.</em></div>
-      </div>
-
-      <div class="info-box warn">
-        <div class="info-icon">⚠️</div>
-        <div><strong>LEGO face blendshapes are a custom art task:</strong> Unlike MetaHumans (which have 52 ARKit blendshapes pre-built), LEGO characters need ARKit morph targets authored from scratch. This is an art/rigging task that needs to be scoped into Week 3–4. Roughly 5–10 days for an experienced facial rigger.</div>
-      </div>
-
-      <div class="info-box warn">
-        <div class="info-icon">⚠️</div>
-        <div><strong>UDP Messaging plugin must be enabled before packaging:</strong> If you package the UE project for a broadcast build (e.g. running on a dedicated render machine), the UDP Messaging plugin must be enabled, and the network binding set to your specific IP — not 0.0.0.0 on Windows (which only binds to default interface). This is a common gotcha for live deployments.</div>
-      </div>
-
-      <div class="info-box note">
-        <div class="info-icon">💡</div>
-        <div><strong>Rokoko vs Xsens — choose one for POC, plan for hybrid:</strong> Rokoko is cheaper and faster to set up; Xsens is more precise and field-proven at major broadcast events. For the POC, Rokoko is the pragmatic choice. For Phase 5 live events, Xsens or a hybrid workflow is worth evaluating. Both use the same Live Link architecture so swapping is possible.</div>
-      </div>
-
-      <div class="info-box note">
-        <div class="info-icon">💡</div>
-        <div><strong>UE 5.7 is the target engine version:</strong> Spatially Aware Retargeting (specifically designed for extreme proportion differences), improved IK Retargeter, multi-NDI broadcast tutorials, and updated Live Link Face support (including Android and USB-C cameras) all landed in 5.7. Build on 5.7 from day one.</div>
-      </div>
-
-      <div class="info-box tip">
-        <div class="info-icon">✅</div>
-        <div><strong>Use Live Link Hub for multi-performer sync:</strong> With two performers (two suits + two iPhones), Live Link Hub (built into UE 5.4+) handles synchronising and recording all four streams simultaneously with timecode alignment. Set this up early — syncing two performers manually in AnimBP is error-prone under live conditions.</div>
-      </div>
-
-      <div class="info-box tip">
-        <div class="info-icon">✅</div>
-        <div><strong>Zero Density outreach — early Phase 3 conversation:</strong> ZD's Reality platform is UE5-native and was demonstrated at NAB 2025 turning a compact LED stage into a full virtual sports studio with web-controlled AR. An early conversation with ZD about the LEGO project — even just a demo — is worthwhile for Phase 3 scoping. They have an Open Studio License Program announced at IBC 2024.</div>
-      </div>
-
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <div class="info-box alert"><div class="info-icon">🔴</div><div><strong>iOS 26 / Live Link Face crash:</strong> Multiple App Store reviews (May 2026) confirm the Live Link Face app crashes after 10–15 minutes on iOS 26. Don't upgrade performer iPhones — stay on iOS 18 — or switch to Android devices for face capture until Epic release a patch. Flag this to the talent team now.</div></div>
+      <div class="info-box warn"><div class="info-icon">⚠️</div><div><strong>LEGO face blendshapes are a custom art task:</strong> Unlike MetaHumans (which have 52 ARKit blendshapes pre-built), LEGO characters need ARKit morph targets authored from scratch. This is an art/rigging task — roughly 5–10 days for an experienced facial rigger. Scope into Week 3–4.</div></div>
+      <div class="info-box warn"><div class="info-icon">⚠️</div><div><strong>UDP Messaging must be enabled before packaging:</strong> If you package the UE project for a broadcast build on a dedicated render machine, the UDP Messaging plugin must be enabled with the network binding set to your specific IP — not 0.0.0.0 on Windows (which only binds to default interface).</div></div>
+      <div class="info-box note"><div class="info-icon">💡</div><div><strong>Rokoko vs Xsens — choose one for POC:</strong> Rokoko is cheaper and faster to set up; Xsens is more precise and field-proven at major broadcast events. For the POC, Rokoko is the pragmatic choice. For Phase 5 live events, Xsens or a hybrid workflow is worth evaluating. Both use the same Live Link architecture so swapping is possible.</div></div>
+      <div class="info-box note"><div class="info-icon">💡</div><div><strong>UE 5.7 is the target engine version:</strong> Spatially Aware Retargeting, improved IK Retargeter, multi-NDI broadcast tutorials, updated Live Link Face support (including Android and USB-C cameras) all landed in 5.7. Build on 5.7 from day one.</div></div>
+      <div class="info-box tip"><div class="info-icon">✅</div><div><strong>Use Live Link Hub for multi-performer sync:</strong> With two performers (two suits + two iPhones), Live Link Hub handles synchronising and recording all four streams simultaneously with timecode alignment. Set this up early — syncing manually in AnimBP is error-prone under live conditions.</div></div>
+      <div class="info-box tip"><div class="info-icon">✅</div><div><strong>Zero Density early conversation:</strong> ZD's Reality platform was demonstrated at NAB 2025 turning a compact LED stage into a full virtual sports studio with web-controlled AR. An early conversation about the LEGO project — even just a demo — is worthwhile for Phase 3 scoping. They have an Open Studio License Program from IBC 2024.</div></div>
     </div>
-
   </div>
+
+  <a href="#top" class="back-top">↑ Back to top</a>
 
 </div>
 
 <footer>
-  <div>LEGO × TONGAL × BCVR Immersive — SDK & Implementation Research</div>
-  <div>Compiled May 2026 · UE 5.7 / Rokoko / Xsens / NDI / Zero Density</div>
+  <div>LEGO × TONGAL × BCVR Immersive — SDK & Implementation Research · May 2026</div>
+  <a href="index.html" class="footer-home">⌂ Home</a>
 </footer>
 
+<script>
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+const chapterIds = ['c1','c2','c3','c4','c5','c6','c7'];
+const navBtns = document.querySelectorAll('.nav-btn');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = chapterIds.indexOf(entry.target.id);
+      navBtns.forEach((btn, i) => btn.classList.toggle('active', i === idx));
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+chapterIds.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+</script>
 </body>
 </html>
